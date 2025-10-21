@@ -1,0 +1,8 @@
+[04-Apr-2024 18:35:30 UTC] PHP Fatal error:  Uncaught Error: Class 'Symfony\Component\Finder\Finder' not found in /home/bapped13/public_html/apps/assets/Library/TCPDF/scripts/doctum.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/TCPDF/scripts/doctum.php on line 9
+[29-Apr-2024 23:37:51 UTC] PHP Fatal error:  Uncaught Error: Class 'Symfony\Component\Finder\Finder' not found in /home/bapped13/public_html/apps/assets/Library/TCPDF/scripts/doctum.php:9
+Stack trace:
+#0 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/TCPDF/scripts/doctum.php on line 9

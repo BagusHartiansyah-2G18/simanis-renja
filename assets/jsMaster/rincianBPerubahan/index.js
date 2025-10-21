@@ -916,7 +916,7 @@ function _saveed(){
             tahun:_.tahun
         }
         // return console.log(param);
-        _post('proses/insBelanja',param).then(res=>{
+        _post('proses/insBelanjaP',param).then(res=>{
             res=JSON.parse(res);
             if(res.exec){
                 _modalHide('modal');
@@ -968,7 +968,7 @@ function _saveUpded(index){
         valuesDetail=`INSERT INTO ubrincian(
                     kdRincian, kdJudul, kdSub, kdDinas, uraian, total, 
                     jumlah1, jumlah2, jumlah3, satuan1, satuan2, satuan3, 
-                    volume, satuanVol, harga,taRincian,tahapan,idSsh
+                    volume, satuanVol, harga,taRincian,tahapan,idSsh, qdel
                 ) VALUES `;
         
         values=`update ubjudul set
@@ -990,7 +990,7 @@ function _saveUpded(index){
                         `+_valforQuery(v1.jumlah1)+`,`+_valforQuery(v1.jumlah2)+`,`+_valforQuery(v1.jumlah3)+`,
                         `+_valforQuery(v1.satuan1)+`,`+_valforQuery(v1.satuan2)+`,`+_valforQuery(v1.satuan3)+`,
                         `+_valforQuery(v1.volume)+`,`+_valforQuery(v1.satuanVol)+`,`+_valforQuery(v1.harga)+`,
-                        `+_valforQuery(_.tahun)+`,`+_valforQuery(_.tahapan)+`,`+_valforQuery(v1.idSsh)+`
+                        `+_valforQuery(_.tahun)+`,`+_valforQuery(_.tahapan)+`,`+_valforQuery(v1.idSsh)+`,`+_valforQuery(v1.qdel)+`
                     ),
                 `;
         })
@@ -1003,7 +1003,7 @@ function _saveUpded(index){
             tahun:_.tahun,
             kdJudul:_.dtDetailRincian[index].kdJudul
         }
-        _post('proses/updBelanja',param).then(res=>{
+        _post('proses/updBelanjaP',param).then(res=>{
             res=JSON.parse(res);
             if(res.exec){
                 _modalHide('modal');
@@ -1237,7 +1237,7 @@ function _previewRBelanja(){
             ftold=0;
             fdOld=`
                 <td>
-                    0 `+_.dtDetailRincian[a].detail[b].satuanVol+`
+                    0 `+_.dtDetailRincian[a].detail[b].satuan1+`
                 </td>
                 <td>
                     `+_.dtDetailRincian[a].detail[b].satuanVol+`

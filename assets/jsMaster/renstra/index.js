@@ -4,31 +4,73 @@ function _onload(data){
     _.info=data.info;
     
     
-    _.dinas=data.dinas;
-    _.urusan=data.urusan;
-    _.kdUrusan=_.urusan[0].value;
+   _.dinas=data.dinas;
     _.bidang=data.bidang;
     _.kdBidang=_.bidang[0].value;
     _.ind=0;
+    // _.urusan=data.urusan;
+    // _.kdUrusan=_.urusan[0].value;
+    // _.bidang=data.bidang;
+    // _.kdBidang=_.bidang[0].value;
+    // _.ind=0;
     _.tahun=data.tahun;
+
+    _.persentse =[];
+    try {
+        _.persentse.push({
+            nm:"SKPD",
+            persentse:__persentaseRealisasi(_.dinas[_.ind].data)
+        });
+        _.bidang.slice((_.bidang.length==1?0:1),_.bidang.length).forEach(v=>{
+            _.persentse.push({
+                nm:v.valueName,
+                persentse:__persentaseRealisasi(_.dinas[_.ind].data.filter(x=>x.kdBidang ==v.value))
+            });
+        })
+    } catch (error) {
+        _.persentse.push({
+            nm:"all",
+            persentse:0
+        });
+    }
+
+    // const fdt =  _.dinas[_.ind].data.filter(v => Number(v.prealisasi) > 1);
+    // const totalfdt = fdt.reduce((sum, v) => sum + Number(v.prealisasi), 0); 
+    // const persentase = ((totalfdt / (_.dinas[_.ind].data.length * 100)) * 100).toFixed(2);
+    // console.log(persentase + "%");
+
+    
+
     
     $('#bodyTM').html(_form());
     $('#footer').html(data.tmFooter+data.footer);
     
+    
     _startTabel("dt");
 }
+function __persentaseRealisasi(dt) {
+    const fdt =  dt.filter(v => Number(v.prealisasi) > 1);
+    const totalfdt = fdt.reduce((sum, v) => sum + Number(v.prealisasi), 0); 
+    return ((totalfdt / (dt.length * 100)) * 100).toFixed(2);
+}
 function _form() {
-    // <img class="img-fluid d-block mx-auto" src="`+assert+`fs_css/bgForm.png" alt="sasasa"></img>
-    return `
-    
-    <div class="page-header" style="padding: 20px; margin-top: 4%;">
-        <div class="page-block">'
-            <div class="row ml-2" id="pinfo">
-                `+informasix()+`
-            </div>`
-            +_formData()
-        +`</div>
-    </div>`;
+    // <img class="img-fluid d-block mx-auto" src="`+assert+`fs_css/bgForm.png" alt="sasasa"></img>'
+    //  <div class="page-header" style="padding: 20px; margin-top: 4%;">
+    //     <div class="page-block">'
+    //         <div class="row ml-2" id="pinfo">
+    //             `+informasix()+`
+    //         </div>`
+    //         +_formData()
+    //     +`</div>
+    // </div>
+    return ` 
+        
+        
+        <div class="col-lg-9 main-chart" style="margin-top: 4%;"> 
+            ${_formData()}
+        </div>
+        ${newInfo(_.persentse)}
+   `;
 }
 
 function _formData() {
@@ -52,20 +94,9 @@ function _formData() {
                             attr:"font-size:15px;",
                             change:"_getDataOpd(this)",
                             index:true
-                        })
+                        }) 
                         +_inpComboBox({
-                            judul:"Urusan Pemerintahan",
-                            id:"kdUrusan",
-                            color:"black",  
-                            data:_.urusan,
-                            bg:"bg-warning text-dark",
-                            attrRow:"margin-top:5px;",
-                            method:"sejajar",
-                            attr:"font-size:15px;",
-                            change:"_changeUrusan(this)"
-                        })
-                        +_inpComboBox({
-                            judul:"Bidang Pemerintahan",
+                            judul:"Bidang",
                             id:"kdBidang",
                             color:"black",  
                             attrRow:"margin-top:5px;",
@@ -90,9 +121,7 @@ function setTabel(){
             <th>Program</th>
             <th>Kegiatan</th>
             <th>Sub Kegiatan</th>
-            <th>Pra RENJA</th>
-            <th>RENJA</th>
-            <th>RENJA Final</th>
+            <th>DPA</th> 
         </tr>
         </thead>
         <tfoot style="font-size: small;">
@@ -101,66 +130,24 @@ function setTabel(){
                 <th>Program</th>
                 <th>Kegiatan</th>
                 <th>Sub Kegiatan</th>
-                <th>Pra RENJA</th>
-                <th>RENJA</th>
-                <th>RENJA Final</th>
+                <th>Pagu / Realisasi</th> 
             </tr>
       </tfoot>
       <tbody style="font-size: small;">`;
         _.dinas[_.ind].data.forEach((v,i) => {
             fkondisi=false;
-            if(_.kdUrusan=="all"){
+            if(_.kdBidang == v.kdBidang || _.kdBidang=="all"){
                 fkondisi=true;
-            }else{
-                fkondisi=false;
-                if(_.kdUrusan==v.kdUrusan){
-                    fkondisi=true;
-                }
             }
-            if(_.kdBidang=="all" && fkondisi){
-                fkondisi=true;
-            }else{
-                fkondisi=false;
-                if(_.kdBidang==v.kdBidang){
-                    fkondisi=true;
-                }
-            }
-            ftext=(Number(v.totalPRARKA)>1?_$(v.totalPRARKA):"buka");
+            // ftext=(Number(v.totalPRARKA)>1?_$(v.totalPRARKA):"buka");
+            ftext=(Number(v.prealisasi)>1?_$(v.totalPRARKA)+` <b class="text-dark">/ ${v.prealisasi}%</b>`:_$(v.totalPRARKA));
             fbtnPra=[];
             fbtnPra.push({ 
                 clsBtn:`btn-primary shadow btn-block fzMfc`
                 ,func:"_goRincian('1',)"
                 ,icon:`<i class="mdi mdi-file-lock  "></i>`+ftext
                 ,title:"Buka Data "+_$(v.totalPRARKA)
-            });
-            if(!Number(v.qpra)){
-                fbtnPra.push({ 
-                    clsBtn:`btn-success shadow btn-block m-0 fzMfc`
-                    ,func:"_goExport('2',)"
-                    ,icon:`<i class="mdi mdi-file-lock  "></i>Export`
-                    ,title:"Menambahkan ke RENJA"
-                });
-            }
-
-            ftext=(Number(v.totalRKA)>1?_$(v.totalRKA):"buka");
-            fbtnRka=[];
-            fbtnRka.push({ 
-                clsBtn:`btn-primary shadow btn-block fzMfc`
-                ,func:"_goRincian('2',)"
-                ,icon:`<i class="mdi mdi-file-lock  "></i>`+ftext
-                ,title:"Buka Data "+_$(v.totalRKA)
-            });
-            if(!Number(v.qrka) && _kdJabatan>1){
-                fbtnRka.push({ 
-                    clsBtn:`btn-success shadow btn-block m-0 fzMfc`
-                    ,func:"_goExport('3',)"
-                    ,icon:`<i class="mdi mdi-file-lock  "></i>Export`
-                    ,title:"Menambahkan ke RENJA FINAL"
-                });
-            }
-
-            ftext=(Number(v.totalRKAFINAL)>1?_$(v.totalRKAFINAL):"buka");
-            
+            }); 
             if(fkondisi){
                 html+=`
                     <tr>
@@ -178,22 +165,7 @@ function setTabel(){
                             <b>`+v.kdSub+`</b><br>
                             `+v.nmSub+`
                         </td>
-                        <td>`
-                            +_btnGroup(fbtnPra,i)
-                        +`</td>
-                        <td>`
-                            +_btnGroup(fbtnRka,i)
-                            // <button class="btn btn-primary shadow btn-block" style="padding:5px;font-size:15px;" onclick="_goRincian('2',`+i+`)">simpan Perubahan</button>
-                        +`</td>
-                        <td>`
-                            +_btnGroup([{ 
-                                clsBtn:`btn-primary shadow btn-block fzMfc`
-                                ,func:"_goRincian('3',)"
-                                ,icon:`<i class="mdi mdi-file-lock  "></i>`+ftext
-                                ,title:"Buka Data "+_$(v.totalRKAFINAL)
-                            }],i)
-                            // <button class="btn btn-primary shadow btn-block" style="padding:5px;font-size:15px;" onclick="_goRincian('3',`+i+`)">simpan Perubahan</button>
-                        +`</td>`;
+                        <td>${_btnGroup(fbtnPra,i)}</td>`;
                 html+=`</tr>`;   
             }
         });
@@ -248,6 +220,14 @@ function _respon(data,ind){
 }
 
 function _changeUrusan(v) {
+    _post('proses/getRenstraOpd',{}).then(response=>{
+            response=JSON.parse(response);
+            if(response.exec){
+                return _responData(response.data,find);
+            }else{
+                return _toast({bg:'e', msg:response.msg});
+            }
+        })
     _.kdUrusan=v.value;
     $('#kdBidang').html(_getCombo());
     _responTabel();
@@ -287,6 +267,7 @@ function _goRincian(tahapan,ind) {
     var data =btoa(JSON.stringify({
         kdSub:_.dinas[_.ind].data[ind].kdSub,
         kdDinas:_.dinas[_.ind].value,
+        kdBidang:_.kdBidang,
         tahapan:tahapan
     }));
     if(_.tahun.split("-").length>1){

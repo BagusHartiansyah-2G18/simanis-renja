@@ -1,0 +1,25 @@
+Dalam konteks Rencana Kerja dan Anggaran (RKA), monitoring dan evaluasi pencapaian biasanya dilakukan dengan membandingkan antara:
+
+✅ Target Keluaran vs Realisasi Keluaran
+Digunakan untuk menilai pelaksanaan fisik kegiatan.
+- Contoh:
+- Target: Membangun 10 sekolah
+- Realisasi: Terbangun 8 sekolah
+- Capaian Keluaran = (8 / 10) × 100% = 80%
+Ini menunjukkan seberapa jauh kegiatan telah dilaksanakan sesuai rencana.
+
+✅ Target Hasil vs Realisasi Hasil
+Digunakan untuk menilai dampak atau manfaat dari kegiatan.
+- Contoh:
+- Target: Peningkatan literasi sebesar 15%
+- Realisasi: Literasi meningkat 12%
+- Capaian Hasil = (12 / 15) × 100% = 80%
+Ini menunjukkan seberapa besar manfaat yang dirasakan oleh penerima program.
+
+Persentase Serapan = (7.500.000.000 / 10.000.000.000) × 100% = 75%
+
+📌 Jadi, mana yang dipakai?
+- Untuk monitoring pelaksanaan kegiatan → gunakan Keluaran vs Target Keluaran
+- Untuk evaluasi dampak program → gunakan Hasil vs Target Hasil
+- Untuk monitoring anggaran → gunakan Realisasi Anggaran vs Total Anggaran
+Ketiganya saling melengkapi dan sebaiknya digunakan bersama agar gambaran kinerja program lebih utuh.

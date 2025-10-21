@@ -135,6 +135,50 @@ function informasix() {
         </div>
     `;
 }
+
+function newInfo(persen) {  
+    const all = persen[0].persentse;
+    const allSisa = 100-all;
+    let fhtml ='';
+    fhtml=`
+        <h4 class="centered mt">Serapan Anggaran Bidang</h4>
+        ${persen.slice((persen.length==2?1:0),persen.length).map(v=>`
+            <div class="desc">
+                <div class="thumb">
+                    <span class="badge bg-theme"><i class="fa fa-clock-o"></i></span>
+                </div>
+                <div class="details">
+                    <p style="display: flex;justify-content: space-between;">
+                        <b>${v.nm}</b>  <muted>${(v.persentse =='NaN'?0:v.persentse)} %</muted>
+                    </p>
+                </div>
+            </div>
+        `)}
+    `;
+    return `
+        <div class="col-lg-3 ds" style="margin-top: 6%;">
+            <!--COMPLETED ACTIONS DONUTS CHART-->
+            <div class="donut-main">
+              <h4>Progres Serapan Anggaran ${persen.length>2?"SKPD":"Bidang"}</h4>
+              <h5>${all} of 100 %</h5>
+              <canvas id="newchart" height="162" width="162" style="width: 130px; height: 130px;"></canvas>
+              <script>
+                var doughnutData = [{
+                    value: ${all},
+                    color: "#4ECDC4"
+                  },
+                  {
+                    value: ${allSisa},
+                    color: "#fdfdfd"
+                  }
+                ];
+                var myDoughnut = new Chart(document.getElementById("newchart").getContext("2d")).Doughnut(doughnutData);
+              </script>
+            </div>
+            ${fhtml}
+          </div>
+    `;
+}
 function _flogin(key){
     fsize="130px;";
     fcolor='text-dark';

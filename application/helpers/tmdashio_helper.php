@@ -15,6 +15,7 @@
             <link href="'.$furl.'css/style.css" rel="stylesheet">
             <link href="'.$furl.'css/style-responsive.css" rel="stylesheet">
             <script src="'.$furl.'lib/chart-master/Chart.js"></script>
+    
         ';
     }
     function _tmFooter(){
@@ -35,7 +36,9 @@
                 <!--script for this page-->
                 <script src="'.$furl.'lib/sparkline-chart.js"></script>
                 <script src="'.$furl.'lib/zabuto_calendar.js"></script>
-        ';
+                <script type="text/javascript" src="'.$furl.'lib/jquery.backstretch.min.js"></script>
+  
+        ';  
     }
     function _tmLoader(){
         return '';
@@ -64,8 +67,10 @@
         $_['kdJab']=$p['kdJab'];
         $_['nav']=[
             "bg"=>"style='background-color:none;'",
-            "logo"=>$fs_css.'logo/'.$p['logo'],
-            "cls"=>"bg-info text-dark",
+            // "logo"=>$fs_css.'logo/'.$p['logo'],
+            "logo"=>$fs_css.'round-tecn2.gif',
+            
+            "cls"=>"",
             "hgLogo2"=>"150px",
             "wdLogo"=>"50px;",
             "nm"=>$p['nm'],
@@ -75,16 +80,18 @@
             "pgStart"=>$p['pgStart'],
             "pgEnd"=>$p['pgEnd'],
             "form"=>"",
-            "moto"=>"KSB BAIK LUAR BIASA"
+            "moto"=>"..."
         ];
         $_['menu']=array();
         
         // menu 1
+        
+        
         $menuSupport=array();
         array_push($menuSupport,[
             "nm"=>"Set Sub Kegiatan",
             "ic"=>'<i class="mdi mdi-air-filter menu-icon"></i>',
-            "cls"=>'text-dark',
+            "cls"=>'',
             "url"=>$router."control/setsub",
             "ac"=>"",
             "ha"=>$user,
@@ -100,8 +107,8 @@
         array_push($menuSupport,[
             "nm"=>"Renja",
             "ic"=>'<i class="mdi mdi-airballoon-outline menu-icon"></i>',
-            "cls"=>'text-dark',
-            "url"=>$router."control/renstra/null",
+            "cls"=>'',
+            "url"=>$router."control/renstra",
             "ac"=>"",
             "ha"=>$user,
             "subMenu"=>[]
@@ -150,122 +157,6 @@
             "menu"=>$menuSupport
         ]);
 
-        // $menuSupport=array();
-        // array_push($menuSupport,[
-        //     "nm"=>"Basis Data",
-        //     "ic"=>'<i class="mdi mdi-database-plus menu-icon"></i>',
-        //     "url"=>"#",
-        //     "ac"=>"",
-        //     "ha"=>$admin,
-        //     "subMenu"=>[
-        //         [
-        //             "url"=>$router."control/produk",
-        //             "menu"=>"Produk",
-        //             "ha"=>$admin,
-        //             "status"=>""
-        //         ],[
-        //             "url"=>$router."control/subProduk",
-        //             "menu"=>"Sub Produk",
-        //             "ha"=>$admin,
-        //             "status"=>""
-        //         ],[
-        //             "url"=>$router."control/tahapan",
-        //             "menu"=>"Tahapan",
-        //             "ha"=>$admin,
-        //             "status"=>""
-        //         ],[
-        //             "url"=>$router."control/persyaratan",
-        //             "menu"=>"Persyaratan",
-        //             "ha"=>$admin,
-        //             "status"=>""
-        //         ],[
-        //             "url"=>$router."control/settahapan",
-        //             "menu"=>"Set Tahapan",
-        //             "ha"=>$admin,
-        //             "status"=>""
-        //         ],[
-        //             "url"=>$router."control/setsarat",
-        //             "menu"=>"Set Persyaratan",
-        //             "ha"=>$admin,
-        //             "status"=>""
-        //         ]
-        //     ]
-
-        // ]);
-        // array_push($_['menu'],[
-        //     "nm"=>null,
-        //     "menu"=>$menuSupport
-        // ]);
-        
-        // $menuSupport=array();
-        // array_push($menuSupport,[
-        //     "nm"=>"Pendaftaran",
-        //     "ic"=>'<i class="mdi mdi-file-document-box menu-icon"></i>',
-        //     "cls"=>'text-dark',
-        //     "url"=>$router."control/pendaftaran",
-        //     "ac"=>"",
-        //     "ha"=>$user,
-        //     "subMenu"=>[]
-
-        // ]);
-        // array_push($_['menu'],[
-        //     "nm"=>null,
-        //     "menu"=>$menuSupport
-        // ]);
-
-        // $menuSupport=array();
-        // array_push($menuSupport,[
-        //     "nm"=>"Hasil Pekerjaan",
-        //     "ic"=>'<i class="mdi mdi-arrange-bring-to-front menu-icon"></i>',
-        //     "cls"=>'text-dark',
-        //     "url"=>$router."control/hasilPekerjaan/null",
-        //     "ac"=>"",
-        //     "ha"=>$user,
-        //     "subMenu"=>[]
-
-        // ]);
-        // array_push($_['menu'],[
-        //     "nm"=>null,
-        //     "menu"=>$menuSupport
-        // ]);
-
-        // $menuSupport=array();
-            // array_push($menuSupport,[
-            //     "nm"=>"Laporan",
-            //     "ic"=>'<i class="mdi mdi-arrange-send-to-back  menu-icon"></i>',
-            //     "url"=>"#",
-            //     "ac"=>"",
-            //     "ha"=>$user,
-            //     "subMenu"=>[
-            //         [
-            //             "url"=>$router."control/akun",
-            //             "menu"=>"Notaris",
-            //             "status"=>"active",
-            //             "status"=>""
-            //         ],[
-            //             "url"=>$router."control/produk",
-            //             "menu"=>"PPAT",
-            //             "status"=>"active",
-            //             "status"=>""
-            //         ],[
-            //             "url"=>$router."control/subProduk",
-            //             "menu"=>"IBM",
-            //             "status"=>"active",
-            //             "status"=>""
-            //         ],[
-            //             "url"=>$router."control/tahapan",
-            //             "menu"=>"Keuangan",
-            //             "status"=>"active",
-            //             "status"=>""
-            //         ]
-            //     ]
-
-            // ]);
-            // array_push($_['menu'],[
-            //     "nm"=>null,
-            //     "menu"=>$menuSupport
-            // ]);
-
         $menuSupport=array();
         array_push($menuSupport,[
             "nm"=>"Pengaturan",
@@ -286,7 +177,7 @@
         array_push($menuSupport,[
             "nm"=>"Tahun ".$CI->sess->tahun,
             "ic"=>'<i class="mdi mdi-calendar menu-icon"></i>',
-            "cls"=>'text-dark',
+            "cls"=>'',
             "url"=>$router."control/dashboard/null",
             "ac"=>"",
             "ha"=>$user,
@@ -333,11 +224,27 @@
             ]);
         }
 
+        $menuSupport=array();
+        array_push($menuSupport,[
+            "nm"=>"SOP",
+            "ic"=>'<i class="fa fa-th-list"></i>',
+            "cls"=>'',
+            "url"=>$router."control/sop/null",
+            "ac"=>"",
+            "ha"=>$user,
+            "subMenu"=>[]
+
+        ]);
+        array_push($_['menu'],[
+            "nm"=>null,
+            "menu"=>$menuSupport
+        ]);
+        
         // header
         $_['header']=[
             "nama"=>"",
             "ic"=>$fs_css."/boy.png",
-            "cls"=>" bg-light shadow",
+            "cls"=>" black-bg",
             "style"=>"background-color: #3a4f5573;",
             "style1"=>'style="background-image:url('.$fs_css."bgForm.png".'); height:'.$_['nav']['hgLogo2'].';"',
             "contentDropList"=>[
@@ -455,7 +362,7 @@
                     <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
                 </div>
                 <!--logo start-->
-                <a href="index.html" style="margin-top: 10px;" class="logo"><b><span>'.$st['nav']['nm'].'</span></b></a>
+                <a href="#" style="margin-top: 10px;" class="logo"><b>'.substr($st['nav']['nm'],0,2).'<span>'.substr($st['nav']['nm'],2,6).'</span></b></a>
                 <!--logo end-->
                 <div class="nav notify-row" id="top_menu">
                 <!--  notification start -->
@@ -502,7 +409,7 @@
                     // print_r($st['kdJab']."  |  ".$vx." <br>");
                     if(count($menu['subMenu'])>0){
                         $fdata.='
-                            <li class="'.$fcls.' li-boder">
+                            <li class="'.$fcls.'">
                                 <a href="javascript:;" class="'.$faktifMenu.'">
                                     '.$menu['ic'].'
                                 <span>'.$menu['nm'].'</span>
@@ -525,7 +432,7 @@
                             ';
                     }else{
                         $fdata.='
-                            <li class="'.$fcls.' li-boder">
+                            <li class="'.$fcls.'">
                                 <a class="'.$faktifMenu.'" href="'.$menu['url'].'">
                                 '.$menu['ic'].'
                                 <span>'.$menu['nm'].'</span>
@@ -556,9 +463,8 @@
                 <div id="sidebar" class="nav-collapse '.$st['nav']['cls'].'">
                     <!-- sidebar menu start-->
                     <ul class="sidebar-menu" id="nav-accordion">
-                        <p class="centered"><a href="profile.html"><img src="'.$st['nav']['logo'].'"  width="80"></a></p>
+                        <p class="centered"><a href="profile.html"><img class="img-circle" src="'.$st['nav']['logo'].'"  width="80"></a></p>
                         <h5 class="centered"><b>'.strtoupper($st['nav']['user']).'</b></h5>
-                        <hr class="bg-light">
                         '.$fdata.'
                     </ul>
                     <!-- sidebar menu end-->

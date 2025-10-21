@@ -44,6 +44,7 @@ class Proses extends CI_Controller {
         // return print_r($q);
         $member=$this->qexec->_func($q);
         if(count($member)==1){
+        // if(count($member)>1){
             // if($kondisi){//for login awal no sess
             //     if(substr($member[0]['kdJabatan'],5)<3){
             //         $pembahasan=$this->qexec->_func("SELECT tahun,noPembahasan,progres,finals,files FROM pembahasan ORDER by ins desc limit 1");
@@ -87,44 +88,33 @@ class Proses extends CI_Controller {
         }else{
             $baseEND=json_decode((base64_decode($_POST['data'])));
             $kdDinas   =$baseEND->{'kdDinas'};
+            $kdBidang   =$baseEND->{'kdBidang'};
             $data       =$baseEND->{'data'};
 
             // return print_r($data[0]->act);
-            $qadd='INSERT INTO `psub`(`kdSub`, `kdKeg`, `kdDinas`, `nmSub`, `taSub`) VALUES ';
+            $qadd='';
             $qdel='';
             $kondisi=true;
             foreach ($data as $key => $v) {
                 if($v->act){
                     $kondisi=false;
-                    $qadd.='(
-                        '.$this->mbgs->_valforQuery($v->kdSub).','.$this->mbgs->_valforQuery($v->kdKeg).',
-                        '.$this->mbgs->_valforQuery($kdDinas).','.$this->mbgs->_valforQuery($v->nmSub).',
-                        '.$this->mbgs->_valforQuery($this->tahun).'
-                    ),';
+                    $qadd.='update psub set kdBidang="'.$kdBidang.'" where kdBidang=0 and 
+                        kdSub = '.$this->mbgs->_valforQuery($v->kdSub).' and
+                        kdKeg = '.$this->mbgs->_valforQuery($v->kdKeg).' and
+                        kdDinas = '.$this->mbgs->_valforQuery($kdDinas).' and
+                        taSub = '.$this->mbgs->_valforQuery($this->tahun).'; ';
                 }else{
-                    $qdel.='DELETE FROM `psub` WHERE 
-                            kdSub='.$this->mbgs->_valforQuery($v->kdSub).' and
-                            kdKeg='.$this->mbgs->_valforQuery($v->kdKeg).' and
-                            kdDinas='.$this->mbgs->_valforQuery($kdDinas).' and
-                            taSub='.$this->mbgs->_valforQuery($this->tahun).';
-                    ';
+                    $qdel.='update psub set kdBidang="0" where kdBidang="'.$kdBidang.'" and
+                            kdSub = '.$this->mbgs->_valforQuery($v->kdSub).' and
+                            kdKeg = '.$this->mbgs->_valforQuery($v->kdKeg).' and
+                            kdDinas = '.$this->mbgs->_valforQuery($kdDinas).' and
+                            taSub = '.$this->mbgs->_valforQuery($this->tahun).';';
                 }
             }
-            $qadd=substr($qadd,0,strlen($qadd)-1).";";
-            if($kondisi){
-                $qadd='';
-            }
+            // return print_r($qadd.$qdel);
             $check=$this->qexec->_multiProc($qadd.$qdel);
             if($check){
-                $this->_['data']=$this->qexec->_func(_renstraOpdGet($kdDinas,$this->tahun,""));
-                $this->_['tsub']=$this->qexec->_func(_tsub($kdDinas,$this->tahun,""))[0]['total'];
-                $this->_['tsubProses']=$this->qexec->_func(_tsubProses($kdDinas,$this->tahun,""));
-                if(count($this->_['tsubProses'])==0){
-                    $this->_['tsubProses']=0;
-                }
-                $this->_['tpaguPra']=$this->qexec->_func(_tpagu($kdDinas,"1",$this->tahun,""))[0]['total'];
-                $this->_['tpaguRka']=$this->qexec->_func(_tpagu($kdDinas,"2",$this->tahun,""))[0]['total'];
-                $this->_['tpaguFinal']=$this->qexec->_func(_tpagu($kdDinas,"3",$this->tahun,""))[0]['total'];
+                $this->_['data']=$this->qexec->_func(_renstraOpdBidangGet($kdDinas,"",$this->tahun,""));
                 return $this->mbgs->resTrue($this->_);
             }else{
                 return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
@@ -231,9 +221,14 @@ class Proses extends CI_Controller {
             $hasil =$baseEND->{'hasil'};
             $keluaranT =$baseEND->{'keluaranT'};
             $hasilT =$baseEND->{'hasilT'};
+            
+            $dkeluaran =$baseEND->{'dkeluaran'};
+            $dhasil =$baseEND->{'dhasil'};
+
             $export =$baseEND->{'export'};
             
-
+            // return print_r($baseEND);
+        
             $q="UPDATE psub SET 
                 lokasiP='".$lokasiP."',
                 waktuP='".$waktuP."',
@@ -241,7 +236,9 @@ class Proses extends CI_Controller {
                 keluaran='".$keluaran."',
                 hasil='".$hasil."',
                 keluaranT='".$keluaranT."',
-                hasilT='".$hasilT."'
+                hasilT='".$hasilT."',
+                dkeluaran='".$dkeluaran."',
+                dhasil='".$dhasil."'
             WHERE kdDinas='".$kdDinas."'
                 and kdSub ='".$kdSub."'
                 and kdKeg ='".$kdKeg."'
@@ -272,7 +269,7 @@ class Proses extends CI_Controller {
                     $check=$this->qexec->_multiProc($q);
                     if($check){
                         $q="
-                            INSERT INTO `ubjudul` (
+                            INSERT INTO `ubjudul` (kdSUb, kdDinas,  kdApbd6, kdSDana, nama, taJudul, total, tahapan, dateUpdate, kdJudul, status)(
                                 SELECT 
                                     kdSUb, kdDinas, kdApbd6, kdSDana, nama, taJudul, total,".$tahapan.", dateUpdate, kdJudul, status 
                                 FROM ubjudul where 
@@ -282,7 +279,7 @@ class Proses extends CI_Controller {
                                 tahapan=".$this->mbgs->_valforQuery($tahapan-1)." and
                                 status=1
                             );
-                            INSERT INTO `ubrincian` (
+                            INSERT INTO `ubrincian` (kdRincian, kdJudul, kdSUb, kdDinas, uraian, total, jumlah1, jumlah2, jumlah3, satuan1, satuan2, satuan3, volume, satuanVol, harga, date, taRincian, status, tahapan)(
                                 SELECT kdRincian, kdJudul, kdSub, kdDinas, uraian, total, jumlah1, jumlah2, jumlah3, satuan1, satuan2, satuan3, volume, satuanVol, 
                                     harga, date, taRincian, status,".$tahapan."
                                 FROM ubrincian where 
@@ -297,6 +294,8 @@ class Proses extends CI_Controller {
                             kdDinas=".$this->mbgs->_valforQuery($kdDinas)." and 
                             taSub='".$this->tahun."'
                         ";
+                        // return print_r($q); 
+                        // return print_r($q); 
                         $check=$this->qexec->_multiProc($q);
                         if($check){
                             return $this->mbgs->resTrue($this->_);
@@ -400,6 +399,73 @@ class Proses extends CI_Controller {
         }
         // }return $this->mbgs->resFalse($portal['msg']);
     }
+    function insBelanjaP(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }
+        // $portal=$this->_keamanan($_POST['code'],_getNKA("c-prod",false));
+        // if($portal['exec']){
+        $baseEND=json_decode((base64_decode($_POST['data'])));
+        
+        $qdel   =$baseEND->{'qdel'};
+        $judul   =$baseEND->{'judul'};
+        $rincian   =$baseEND->{'rincian'};
+        $kdDinas    =$baseEND->{'kdDinas'};
+        $kdSub      =$baseEND->{'kdSub'};
+        $tahapan    =$baseEND->{'tahapan'};
+        $tahun      =$baseEND->{'tahun'};
+        
+        $q=substr($judul,0,strlen(trim($judul))-1).";";
+        $q.=substr($rincian,0,strlen(trim($rincian))-1);
+
+        $check=$this->qexec->_multiProc($qdel);
+        if($check){
+			// return print_r($q);
+            $check=$this->qexec->_multiProc($q);
+            if($check){
+                $spl=explode("-",$tahun);
+                $tahunOld=($spl[1]>1? $spl[0]."-".($spl[1]-1) : $spl[0]); 
+        
+                $v=array();
+                $v['kdSub']=$kdSub;
+                $v['tahapan']=$tahapan;
+                $v['kdDinas']=$kdDinas;
+                $v['tahun']=$tahun;
+                $this->_['dtDetailRincian']=$this->qexec->_func(_judulRBelanja($v));
+                foreach ($this->_['dtDetailRincian'] as $key => $v1) {
+                    $v['kdJudul']=$v1['kdJudul'];
+                    $this->_['dtDetailRincian'][$key]['detail']=$this->qexec->_func(_detailRBelanja($v));
+                }
+                
+                $v=array();
+                $v['kdSub']=$kdSub;
+                $v['tahapan']=$tahapan;
+                $v['kdDinas']=$kdDinas;
+                $v['tahun']=$tahun;
+                $this->_['dtDetailRincian']=$this->qexec->_func(_judulRBelanja($v));
+                // return print_r(_judulRBelanja($v));
+                foreach ($this->_['dtDetailRincian'] as $key => $v1) {
+                    $v['kdJudul']=$v1['kdJudul'];
+                    if($v1['qdel']){
+                        $v['tahun']=$tahunOld;
+                        $v['tahapan']=3;
+                        $this->_['dtDetailRincian'][$key]['old']=$this->qexec->_func(_judulRBelanjaOld($v));
+                        $this->_['dtDetailRincian'][$key]['old'][0]['detail']=$this->qexec->_func(_detailRBelanja($v));
+                    }
+                    $v['tahapan']=$tahapan;
+                    $v['tahun']=$this->tahun;
+                    $this->_['dtDetailRincian'][$key]['detail']=$this->qexec->_func(_detailRBelanja($v));
+                }
+                
+                return $this->mbgs->resTrue($this->_);
+            }
+            // $this->_['ddata']=$this->qexec->_func(_dproduk($this->kdKantor,""));
+            return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
+        }else{
+            return $this->mbgs->resFalse("Terjadi Kesalahan sistem");
+        }
+        // }return $this->mbgs->resFalse($portal['msg']);
+    }
     function updBelanja(){
         if($this->sess->kdMember==null){
             return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
@@ -471,6 +537,115 @@ class Proses extends CI_Controller {
                     $v['kdJudul']=$v1['kdJudul'];
                     $this->_['dtDetailRincian'][$key]['detail']=$this->qexec->_func(_detailRBelanja($v));
                 }
+                return $this->mbgs->resTrue($this->_);
+            }else{
+                return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
+            }
+        }else{
+            return $this->mbgs->resFalse("Terjadi Kesalahan saat mengamankan data");
+        }
+        // $q=substr($judul,0,strlen(trim($judul))-1).";";
+        // $q.=substr($rincian,0,strlen(trim($rincian))-1);
+
+        
+    }
+    function updBelanjaP(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }
+        $baseEND=json_decode((base64_decode($_POST['data'])));
+    
+        $judul      =$baseEND->{'judul'};
+        $rincian    =$baseEND->{'rincian'};
+        $kdDinas    =$baseEND->{'kdDinas'};
+        $kdSub      =$baseEND->{'kdSub'};
+        $tahapan    =$baseEND->{'tahapan'};
+        $tahun      =$baseEND->{'tahun'};
+        $kdJudul    =$baseEND->{'kdJudul'};
+        
+        // mengamankan data
+        // update ubjudul set
+        //         status=0
+        //     where kdSUb=".$this->mbgs->_valforQuery($kdSub)." and  
+        //         kdDinas=".$this->mbgs->_valforQuery($kdDinas)." and 
+        //         taJudul=".$this->mbgs->_valforQuery($tahun)." and
+        //         tahapan=".$this->mbgs->_valforQuery($tahapan)." and
+        //         kdJudul=".$this->mbgs->_valforQuery($kdJudul)." ;
+        // delete from ubjudul 
+        //             where kdSUb=".$this->mbgs->_valforQuery($kdSub)."   and  
+        //                 kdDinas=".$this->mbgs->_valforQuery($kdDinas)." and 
+        //                 taJudul=".$this->mbgs->_valforQuery($tahun)."   and
+        //                 tahapan=".$this->mbgs->_valforQuery($tahapan)." and
+        //                 kdJudul=".$this->mbgs->_valforQuery($kdJudul)." and
+        //                 status=0;
+        
+        $spl=explode("-",$tahun);
+        $tahunOld=($spl[1]>1? $spl[0]."-".($spl[1]-1) : $spl[0]); 
+        
+        $q="
+            update ubrincian set
+                status=0
+            where kdSUb=".$this->mbgs->_valforQuery($kdSub)." and  
+                kdDinas=".$this->mbgs->_valforQuery($kdDinas)." and 
+                taRincian=".$this->mbgs->_valforQuery($tahun)." and
+                tahapan=".$this->mbgs->_valforQuery($tahapan)." and
+                kdJudul=".$this->mbgs->_valforQuery($kdJudul)." ;
+        ";
+        $check=$this->qexec->_multiProc($q);
+        // $check=true;
+        if($check){
+
+            // set data baru
+            $q=trim($judul);
+            $q.=substr($rincian,0,strlen(trim($rincian))-1);
+            // return print_r($q);
+            $check=$this->qexec->_multiProc($q);
+            if($check){
+                // hapus data lama
+                $q="
+                    delete from ubrincian 
+                    where kdSUb=".$this->mbgs->_valforQuery($kdSub)."   and  
+                        kdDinas=".$this->mbgs->_valforQuery($kdDinas)." and 
+                        taRincian=".$this->mbgs->_valforQuery($tahun)." and
+                        tahapan=".$this->mbgs->_valforQuery($tahapan)." and
+                        kdJudul=".$this->mbgs->_valforQuery($kdJudul)." and
+                        status=0;
+                ";
+                
+                $check=$this->qexec->_multiProc($q);
+                
+                // $v=array();
+                // $v['kdSub']=$kdSub;
+                // $v['tahapan']=$tahapan;
+                // $v['kdDinas']=$kdDinas;
+                // $v['tahun']=$tahun;
+                // $this->_['dtDetailRincian']=$this->qexec->_func(_judulRBelanja($v));
+                // foreach ($this->_['dtDetailRincian'] as $key => $v1) {
+                //     $v['kdJudul']=$v1['kdJudul'];
+                //     $this->_['dtDetailRincian'][$key]['detail']=$this->qexec->_func(_detailRBelanja($v));
+                // }
+                // return $this->mbgs->resTrue($this->_);
+                
+                $v=array();
+                $v['kdSub']=$kdSub;
+                $v['tahapan']=$tahapan;
+                $v['kdDinas']=$kdDinas;
+                $v['tahun']=$tahun;
+                $this->_['dtDetailRincian']=$this->qexec->_func(_judulRBelanja($v));
+                // return print_r(_judulRBelanja($v));
+                foreach ($this->_['dtDetailRincian'] as $key => $v1) {
+                    $v['kdJudul']=$v1['kdJudul'];
+                    if($v1['qdel']){
+                        $v['tahun']=$tahunOld;
+                        $v['tahapan']=3;
+                        $this->_['dtDetailRincian'][$key]['old']=$this->qexec->_func(_judulRBelanjaOld($v));
+                        $this->_['dtDetailRincian'][$key]['old'][0]['detail']=$this->qexec->_func(_detailRBelanja($v));
+                    }
+                    $v['tahapan']=$tahapan;
+                    $v['tahun']=$this->tahun;
+                    $this->_['dtDetailRincian'][$key]['detail']=$this->qexec->_func(_detailRBelanja($v));
+                }
+                
                 return $this->mbgs->resTrue($this->_);
             }else{
                 return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
@@ -729,6 +904,60 @@ class Proses extends CI_Controller {
         }
     }
 
+    function prosesCair(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }
+        $baseEND=json_decode((base64_decode($_POST['data'])));
+        
+        $kdJudul    =$baseEND->{'kdJudul'};
+        $kdSub    =$baseEND->{'kdSub'};
+        $kdDinas    =$baseEND->{'kdDinas'};
+
+        $tahapan    =$baseEND->{'tahapan'};
+        $status    =$baseEND->{'status'};
+        $date    =$baseEND->{'date'};
+        $cair    =$baseEND->{'cair'};
+        $tahun =$baseEND->{'tahun'};
+        $kdRincian =$baseEND->{'kdRincian'}; 
+
+        $check=$this->qexec->_proc("update ubrincian set Rdate='".$date."', realisasi='".$cair."', Ruser='".$this->kdMember."' where 
+                kdSub='".$kdSub."'
+                and kdDinas='".$kdDinas."'
+                and tahapan='".$tahapan."'
+                and kdJudul='".$kdJudul."'
+                and taRincian='".$tahun."' 
+                and kdRincian='".$kdRincian."'
+        ");
+        if($check){
+            return $this->mbgs->resTrue($this->_);
+        }
+        return $this->mbgs->resFalse("terjadi kesalahan pada proses tersebut !!!");
+    }
+
+    function setPersentaseSub() {
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }
+        $baseEND=json_decode((base64_decode($_POST['data'])));
+        $kdKeg    =$baseEND->{'kdKeg'}; 
+        $kdSub    =$baseEND->{'kdSub'};
+        $kdDinas    =$baseEND->{'kdDinas'};
+
+        $prealisasi    =$baseEND->{'prealisasi'};
+        
+
+        $check=$this->qexec->_proc("update psub set prealisasi='".$prealisasi."'  where 
+                kdSub='".$kdSub."'
+                and kdKeg='".$kdKeg."'
+                and kdDinas='".$kdDinas."' 
+                and taSub='".$this->tahun."' 
+        ");
+        if($check){
+            return $this->mbgs->resTrue($this->_);
+        }
+        return $this->mbgs->resFalse("terjadi kesalahan pada proses tersebut !!!");
+    }
     function perbaruiAkun(){
         if($this->sess->kdMember==null){
             return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
@@ -744,9 +973,13 @@ class Proses extends CI_Controller {
         // return print_r($q);
         $member=$this->qexec->_func($q);
         if(count($member)>0){
-
-            $check=$this->qexec->_proc("update member set nmMember='".$username."' , password='".$passNew."' where 
+            $pass = "";
+            if(strlen($passNew)>0){
+                $pass = " , password='".$passNew."'";
+            }
+            $check=$this->qexec->_proc("update member set nmMember='".$username."' ".$pass." where 
                 kdMember='".$this->kdMember."'
+                and kdApp='".$this->mbgs->app['kd']."'
             ");
             if($check){
                 return $this->mbgs->resTrue($this->_);
@@ -791,6 +1024,77 @@ class Proses extends CI_Controller {
         }else{
             return $this->mbgs->resFalse("Terjadi Kesalahan sistem");
         }
+    }
+    function saveImportExcellSIPD(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        } 
+        $baseEND=json_decode((base64_decode($_POST['data']))); 
+        if(count((array) $baseEND)>0){
+            $qexec          =$baseEND->{'qexec'}; 
+            
+            $check=$this->qexec->_multiProc($qexec);
+            if($check){
+                return $this->mbgs->resTrue($this->_); 
+            }else{
+                return $this->mbgs->resFalse("Terjadi Kesalahan sistem");
+            }
+        } else{
+          return print_r((base64_decode($_POST['data'])));
+        }
+        
+    }
+    
+    function saveImportJsonRealisasi(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        } 
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true); 
+        $dt = $data['dt']; 
+        $bulan = $data['bulan']; 
+         
+        if(count($data)>0){
+            $qdel="delete from ubjudul where kdDinas='".$this->kdDinas."' and taJudul='".$this->tahun."' and tahapan=1; and bulan='".$bulan."'; ";
+            $q=" insert into ubjudul (kdDinas, kdSub, kdApbd6, kdJudul, nama, taJudul,total,tahapan,bulan,pagu) values";
+            foreach ($dt as $key => $v) {
+                $i = 1;
+                foreach ($v['judul'] as $k => $val) {
+                    $code = explode("-",$val['kode_unik']);
+                    $q.=" 
+                    (
+                        '".$code[0]."',
+                        '".$code[3]."', 
+                        '".$code[4]."',
+                        '".$i."',
+                        '".$val['nama_akun']."',
+                        
+                        '".$this->tahun."',
+                        '".$val['jumlah_sd_saat_ini']."',
+                        '1',
+                        '".$bulan."',
+                        '".$val['alokasi_anggaran']."'
+                    ),";
+                    $i++;
+                }
+                
+            }
+            $q = substr($q,0,strlen($q)-1); 
+            $check=$this->qexec->_multiProc($qdel);
+            if($check){
+                $check=$this->qexec->_multiProc($q);
+                if($check){
+                    return $this->mbgs->resTrue($this->_); 
+                }else{
+                    return $this->mbgs->resFalse("Terjadi Kesalahan sistem");
+                }
+            }else{
+                return $this->mbgs->resFalse("Terjadi Kesalahan sistem");
+            }
+        } else{
+          return print_r((base64_decode($_POST['data'])));
+        }
+        
     }
     
     function inpSlider(){

@@ -1,0 +1,10 @@
+UPDATE `dinas` SET `taDinas`='2025' WHERE `taDinas`=2023
+UPDATE `psub` SET `taSub`='2025' WHERE `taSub`=2023;
+UPDATE `pkegiatan` SET `taKeg`='2025' WHERE `taKeg`=2023;
+UPDATE `pprogram` SET `taProg`='2025' WHERE `taProg`=2023;
+UPDATE `pbidang` SET `taBidang`='2025' WHERE `taBidang`=2023;
+UPDATE `purusan` SET `taUrusan`='2025' WHERE `taUrusan`=2023;
+
+INSERT INTO `psub`(`kdSub`, `kdKeg`, `kdDinas`, `nmSub`, `taSub`, `qpra`, `qrka`, `qrkaFinal`, `lokasiP`, `waktuP`, `kelompokS`, `keluaran`, `hasil`, `keluaranT`, `hasilT`, `qdel`, `idPri`) (
+ 	SELECT `kdSub`, `kdKeg`, `kdDinas`, `nmSub`, '2025', `qpra`, `qrka`, `qrkaFinal`, `lokasiP`, `waktuP`, `kelompokS`, `keluaran`, `hasil`, `keluaranT`, `hasilT`, `qdel`, `idPri` FROM `psub`   WHERE taSub='2023' and kdDinas='5.02.0.00.0.00.02.0000'
+)

@@ -5,8 +5,8 @@
         public $app=[
             "rxxx"=>['Mk','x','OA'],
             "kd"=>"MFC2G18-04",
-            "nm"=>"E RENJA",
-            "nama"=>"Badan Perencanaan Pembangunan Daerah",
+            "nm"=>"SI MANIS",
+            "nama"=>"Sistem Monitoring Organisasi",
             "logo"=>"1.png",
             "copyright"=>"Copyright © MSoftwareCenter",
             "loader"=>'loader.webp',
@@ -33,6 +33,7 @@
         }
         public function _getCss(){
             $fsrc=$this->_getAssetUrl()."fs_componen/";
+            
             return '
                 <link rel="stylesheet" type="text/css" href="'.$fsrc.'bootstrap/dist/css/bootstrap-grid.css">
                 <link rel="stylesheet" type="text/css" href="'.$fsrc.'bootstrap/dist/css/bootstrap-grid.css.map">
@@ -271,7 +272,7 @@
 			b.kdMember='".$kodeMember."' AND 
 			b.kunci=0 and 
 			a.kdApp='".$this->app['kd']."' and
-			a.tahun='".$tahun."'";
+			b.ta='".$tahun."'";
         }
         function _isCode(){
             return "1933f89iG";

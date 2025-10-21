@@ -6,7 +6,7 @@ function _onload(data){
     
     
     _.tahun.forEach((v) => {
-        v.url='control/renstra/'+(Number(v.perubahan)==0?v.judul:v.judul+"-"+v.perubahan);
+        v.url='control/sop/'+(Number(v.perubahan)==0?v.judul:v.judul+"-"+v.perubahan);
         v.img='<span class="mdi mdi-database" style="font-size: 40px;color: blue;"></span>';
     });
     
@@ -14,6 +14,7 @@ function _onload(data){
     $('#footer').html(data.tmFooter+data.footer);
     
     // _startTabel("dt");
+     
 }
 function _form() {
     // <img class="img-fluid d-block mx-auto" src="`+assert+`fs_css/bgForm.png" alt="sasasa"></img>
@@ -32,10 +33,15 @@ function _formData() {
                     shadow:false,
                     cls:"w-100 h-100",
                     id :"idContainer",
-                    style:`background-image:url('`+assert+`/fs_sistem/slider/1.jpg'); background-size: cover; min-height:600px; width: 100% !important;`,
+                    style:` min-height:600px; width: 100% !important;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: center;
+                    `,
                     kolom:[
                         {
-                            size:"12",form:_form2()
+                            size:"12 h-100",form:newYear(),style:"padding: 20px;background:none;"
                         }
                     ]
                 })
@@ -64,4 +70,71 @@ function _form2(){
     </div>`;
     // +_textCenter({text:` <a class="small" href="forgot-password.html">Forgot Password?</a>`})+
     //     _textCenter({text:` <a class="small" href="register.html">Create an Account!</a>`})
+}
+
+function newYear() {
+    // <div class="page-header" style="padding: 20px; margin-top: 4%;">
+    //     <div class="page-block">`
+    //         +_formData()
+    //     +`</div>
+    // </div>`;
+    console.log(_.tahun);
+    const dthn =["2025","2026","2027","2028","2029"];
+    const textThn =dthn.map((v)=>{
+        return _.tahun.filter((x)=>x.judul==v).length>0?"akses":"tidak ada akses";
+    });
+    const btn="akses";
+    return `
+        <div class="row content-panel">
+            <div class="col-md-4 profile-text mt mb centered">
+                <div class="right-divider hidden-sm hidden-xs">
+                    <div class="profile-pic">
+                        <img src="`+assert+`/fs_css/bpt.jpg" style="border-radius: 0px; height:250px; width:250px;">
+                    </div>
+                    <h2>Bupati - Wakil Bupati</h2>
+                    <h4 class="p-0 m-0">H. Amar Nurmansyah, ST., M.Si. <br/> Hj. Hanipah, S.Pt., M.M.Inov</h4>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-6 profile-text">
+                        <h2>H. Amir Sarifuddin</h2>
+                        <h4 class="p-0 m-0">Kepala Badan Pengelola Keuangan dan Aset Daerah</h4>
+                        <br>
+                        <p>mengukur dan mengevaluasi kemajuan terhadap target yang telah ditetapkan, memastikan akuntabilitas, mengidentifikasi masalah, dan memungkinkan pengambilan tindakan perbaikan demi mencapai tujuan yang efektif dan efisien</p>
+                        <br>
+                    </div>
+                    <!-- /col-md-4 -->
+                    <div class="col-md-6 centered">
+                        <div class="profile-pic">
+                            <p><img src="`+assert+`/fs_css/bpkad.jpg" class="img-circle"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="content-panel">
+                            <h4><i class="fa fa-angle-right"></i> Priode Jabatan 2025 - 2029</h4>
+                            <hr>
+                            <table class="table">
+                                <thead>
+                                <tr>${dthn.map((v,i)=>`<th>${v}</th>`).join('')}</tr> 
+                                </thead>
+                                <tbody>
+                                    <tr>${textThn.map((v,i)=>`
+                                        <td><a class="btn bg-success text-white" href="${v=="akses"?router+"control/sop/"+dthn[i]:"#"}">${v}</a></td>
+                                    `).join('')}</tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            
+        </div> 
+        
+    `;
 }

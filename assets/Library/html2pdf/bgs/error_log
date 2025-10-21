@@ -1,0 +1,7 @@
+[01-May-2024 02:29:27 UTC] PHP Warning:  include(../../file/query.php): failed to open stream: No such file or directory in /home/bapped13/public_html/apps/assets/Library/html2pdf/bgs/exportbgs.php on line 2
+[01-May-2024 02:29:27 UTC] PHP Warning:  include(../../file/query.php): failed to open stream: No such file or directory in /home/bapped13/public_html/apps/assets/Library/html2pdf/bgs/exportbgs.php on line 2
+[01-May-2024 02:29:27 UTC] PHP Warning:  include(): Failed opening '../../file/query.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/bapped13/public_html/apps/assets/Library/html2pdf/bgs/exportbgs.php on line 2
+[01-May-2024 02:29:27 UTC] PHP Fatal error:  Uncaught Error: Class 'query' not found in /home/bapped13/public_html/apps/assets/Library/html2pdf/bgs/exportbgs.php:3
+Stack trace:
+#0 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/bgs/exportbgs.php on line 3

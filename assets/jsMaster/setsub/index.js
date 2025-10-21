@@ -1,12 +1,8 @@
 function _onload(data){
     $('#body').html(data.tmBody);
     myCode=data.code;
-    _.info=data.info;
-    
-    
+    _.info=data.info; 
     _.dinas=data.dinas;
-    _.urusan=data.urusan;
-    _.kdUrusan=_.urusan[0].value;
     _.bidang=data.bidang;
     _.kdBidang=_.bidang[0].value;
     _.ind=0;
@@ -18,23 +14,26 @@ function _onload(data){
 }
 function _form() {
     // <img class="img-fluid d-block mx-auto" src="`+assert+`fs_css/bgForm.png" alt="sasasa"></img>
-    return `
-    
-    <div class="page-header" style="padding: 20px; margin-top: 4%;">
-        <div class="page-block">
-            <div class="row ml-2" id="pinfo">
-                `+informasix()+`
-            </div>`
-            +_formData()
-        +`</div>
-    </div>`;
+    // return `
+    //     ${newInfo()}
+    // `;
+    return ` 
+            <section class="wrapper">
+                <h3><i class="fa fa-angle-right"></i> Penentuan Sub Kegiatan Bidang</h3>
+                <!-- BASIC FORM ELELEMNTS -->
+                <div class="row mt">
+                ${_formData()}
+                </div>
+                
+            </section> 
+    `;
 }
 
 function _formData() {
-    return `<div class="row m-2 shadow">`
+    return `<div class="col-lg-12 m-2 shadow">`
                 +_formIcon({
                     icon:'<i class="mdi mdi-file-check"></i>'
-                    ,text:"<h3>Daftar Sub Kegiatan</h3>",
+                    ,text:"<h3>Data Bidang</h3>",
                     classJudul:' p-2',
                     id:"form1",
                     btn:_btn({
@@ -59,18 +58,7 @@ function _formData() {
                             index:true
                         })
                         +_inpComboBox({
-                            judul:"Urusan Pemerintahan",
-                            id:"kdUrusan",
-                            color:"black",  
-                            data:_.urusan,
-                            bg:"bg-warning text-dark",
-                            attrRow:"margin-top:5px;",
-                            method:"sejajar",
-                            attr:"font-size:15px;",
-                            change:"_changeUrusan(this)"
-                        })
-                        +_inpComboBox({
-                            judul:"Bidang Pemerintahan",
+                            judul:"Bidang",
                             id:"kdBidang",
                             color:"black",  
                             attrRow:"margin-top:5px;",
@@ -110,21 +98,8 @@ function setTabel(){
       <tbody>`;
         _.dinas[_.ind].data.forEach((v,i) => {
             fkondisi=false;
-            if(_.kdUrusan=="all"){
+            if(_.kdBidang == v.kdBidang || v.checked==0){
                 fkondisi=true;
-            }else{
-                fkondisi=false;
-                if(_.kdUrusan==v.kdUrusan){
-                    fkondisi=true;
-                }
-            }
-            if(_.kdBidang=="all" && fkondisi){
-                fkondisi=true;
-            }else{
-                fkondisi=false;
-                if(_.kdBidang==v.kdBidang){
-                    fkondisi=true;
-                }
             }
             if(fkondisi){
                 html+=`
@@ -220,8 +195,7 @@ function savedOPD() {
         if(Number(v.upd)){
             fdt.push({
                 kdSub:v.kdSub,
-                kdKeg:v.kdKeg,
-                nmSub:v.nmSub,
+                kdKeg:v.kdKeg, 
                 act:v.checked
             })
         }
@@ -229,6 +203,7 @@ function savedOPD() {
     // return console.log(fdt);
     param={
         kdDinas:_.dinas[_.ind].value,
+        kdBidang:_.kdBidang,
         data:fdt
     }
     _post('proses/saveRenstraOpd',param).then(res=>{

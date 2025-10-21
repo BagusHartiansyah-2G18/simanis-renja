@@ -1,0 +1,158 @@
+[04-Apr-2024 17:14:06 UTC] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/bapped13/public_html/apps/assets/Library/html2pdf/fixbgs.php on line 2
+[04-Apr-2024 17:14:06 UTC] PHP Warning:  mysqli_query(): Couldn't fetch mysqli in /home/bapped13/public_html/apps/assets/Library/html2pdf/fixbgs.php on line 4
+[04-Apr-2024 17:14:06 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/bapped13/public_html/apps/assets/Library/html2pdf/fixbgs.php on line 6
+[04-Apr-2024 17:14:06 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, bool given in /home/bapped13/public_html/apps/assets/Library/html2pdf/fixbgs.php on line 12
+[04-Apr-2024 17:14:10 UTC] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/bapped13/public_html/apps/assets/Library/html2pdf/tes.php on line 3
+[04-Apr-2024 17:14:10 UTC] PHP Warning:  mysqli_query(): Couldn't fetch mysqli in /home/bapped13/public_html/apps/assets/Library/html2pdf/tes.php on line 5
+[04-Apr-2024 17:14:10 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/bapped13/public_html/apps/assets/Library/html2pdf/tes.php on line 6
+[04-Apr-2024 17:14:14 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php:9
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php(9): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php on line 9
+[04-Apr-2024 17:14:15 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/benarkan.php:9
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/benarkan.php(9): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/benarkan.php on line 9
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 2005
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5580
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5580
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5580
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5595
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5595
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5595
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 7120
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 7125
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8310
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8322
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8594
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8747
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8767
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13080
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13130
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13875
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13890
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14080
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14083
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14100
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14103
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14106
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14123
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14170
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14172
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14209
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14209
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14209
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14210
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14263
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14813
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15589
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15592
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15595
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15663
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 19706
+[04-Apr-2024 17:14:15 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 19710
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 2005
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5580
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5580
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5580
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5595
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5595
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5595
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 7120
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 7125
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8310
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8322
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8594
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8747
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8767
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13080
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13130
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13875
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13890
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14080
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14083
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14100
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14103
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14106
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14123
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14170
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14172
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14209
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14209
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14209
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14210
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14263
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14813
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15589
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15592
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15595
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15663
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 19706
+[06-Apr-2024 00:22:07 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 19710
+[06-Apr-2024 02:33:54 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php:9
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php(9): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php on line 9
+[17-Apr-2024 11:35:24 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php:9
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php(9): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php on line 9
+[18-Apr-2024 13:05:10 UTC] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/bapped13/public_html/apps/assets/Library/html2pdf/fixbgs.php on line 2
+[18-Apr-2024 13:05:10 UTC] PHP Warning:  mysqli_query(): Couldn't fetch mysqli in /home/bapped13/public_html/apps/assets/Library/html2pdf/fixbgs.php on line 4
+[18-Apr-2024 13:05:10 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/bapped13/public_html/apps/assets/Library/html2pdf/fixbgs.php on line 6
+[18-Apr-2024 13:05:10 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, bool given in /home/bapped13/public_html/apps/assets/Library/html2pdf/fixbgs.php on line 12
+[19-Apr-2024 02:31:52 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php:9
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php(9): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/pdf2.php on line 9
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 2005
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5580
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5580
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5580
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5595
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5595
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 5595
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 7120
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 7125
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8310
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8322
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8594
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8747
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 8767
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13080
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13130
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13875
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 13890
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14080
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14083
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14100
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14103
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14106
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14123
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14170
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14172
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14209
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14209
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14209
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14210
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14263
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 14813
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15589
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15592
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15595
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 15663
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 19706
+[05-May-2024 17:00:10 UTC] PHP Deprecated:  Array and string offset access syntax with curly braces is deprecated in /home/bapped13/public_html/apps/assets/Library/html2pdf/_tcpdf_5.0.002/tcpdf.php on line 19710
+[13-May-2024 15:31:09 UTC] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/bapped13/public_html/apps/assets/Library/html2pdf/tes.php on line 3
+[13-May-2024 15:31:09 UTC] PHP Warning:  mysqli_query(): Couldn't fetch mysqli in /home/bapped13/public_html/apps/assets/Library/html2pdf/tes.php on line 5
+[13-May-2024 15:31:09 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, bool given in /home/bapped13/public_html/apps/assets/Library/html2pdf/tes.php on line 6
+[17-May-2024 09:27:09 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/benarkan.php:9
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/benarkan.php(9): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/benarkan.php on line 9

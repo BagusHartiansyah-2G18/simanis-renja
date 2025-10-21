@@ -1,5 +1,5 @@
 function _onload(data){
-    $('#body').html(data.tmBody); 
+    $('#body').html(newPageLogin()); 
     // start 
     judul.nm=data.nm;
     judul.nama=data.nama;
@@ -13,11 +13,15 @@ function _onload(data){
 
     _.sfKdDinas=null;
     _.svKey=false; /// menandakan e master tanpa kode dinas
-    $('#menuAPP').html(_form2());
+    // $('#menuAPP').html(newPageLogin());
     // $('#bodyTM').html(_form2());
     $('#footer').html(data.footer+data.tmFooter);
 
-    _.sfUrl='control/dashboard/';
+    _.sfUrl=router+'control/dashboard/';
+    $.backstretch(assert+"fs_css/background-v12.png", {
+      speed: 500
+    });
+    
 }
 function _form2(){
     hicon="40px";
@@ -68,6 +72,85 @@ function _form2(){
 			</div>
 		</div>
 	`;
+}
+
+function newPageLogin() {
+    return `
+        
+  <div id="login-page">
+    <div class="container">
+      
+      <div class="form-login" style="max-width:550px;">
+        <div class="col-lg-12" style="margin-bottom:20px;">
+          <div class="row content-panel">
+           
+            <div class="col-md-8 profile-text">
+              <h2>SI MANIS</h2>
+              <span>Sistem Monitoring Organisasi</span>
+              <div class=""> 
+                <div class="chart mt">
+                  <div class="sparkline" data-type="line" data-resize="false" data-height="75" data-width="50%" data-line-width="1" data-line-color="#05c5ffff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,667,333,526,996,564,123,890,464,655]">
+                    <canvas width="266" height="75" style="display: inline-block; width: height: 75px; vertical-align: top;"></canvas>
+                  </div>
+                </div> 
+              </div>
+            </div> 
+            <div class="col-md-4 centered">
+              <img src="${assert+`/fs_css/logo/logoKSB.png`}" height="150px">
+            </div>
+            <!-- /col-md-4 -->
+          </div>
+          <!-- /row -->
+        </div> 
+        <h2 class="form-login-heading">sign in now</h2>
+        <div class="login-wrap">
+          <input type="text" class="form-control" placeholder="Username" id="username" autofocus>
+          <br>
+          <input type="password" class="form-control" placeholder="Password" id="password">
+          <label class="checkbox"  style="margin-left: 5%;">
+            <input type="checkbox" value="remember-me"> Remember me
+            <span class="pull-right">
+            <a data-toggle="modal" href="login.html#myModal"> Forgot Password?</a>
+            </span>
+            </label>
+          <button class="btn btn-theme btn-block" href="index.html"  onclick="_logined()"><i class="fa fa-lock"></i> SIGN IN</button>
+          <hr>
+          <div class="login-social-link centered">
+            <p>or you can sign in via your social network</p>
+            <button class="btn btn-facebook" type="submit"><i class="fa fa-facebook"></i> Facebook</button>
+            <button class="btn btn-twitter" type="submit"><i class="fa fa-twitter"></i> Twitter</button>
+          </div>
+          <div class="registration">
+            Don't have an account yet?<br/>
+            <a class="" href="#">
+              Create an account
+              </a>
+          </div>
+        </div>
+        <!-- Modal -->
+        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Forgot Password ?</h4>
+              </div>
+              <div class="modal-body">
+                <p>Enter your e-mail address below to reset your password.</p>
+                <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+              </div>
+              <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button">Cancel</button>
+                <button class="btn btn-theme" type="button">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- modal -->
+      </div>
+    </div>
+  </div>
+    `;
 }
 
 function _login(key) {
@@ -153,11 +236,11 @@ function _logined(){
     param={
         username:$('#username').val(),
         password:$('#password').val(),
-        kdDinas:_.sfKdDinas,
-        tahun:$('#tahun').val(),
+        kdDinas:'-',
+        tahun:'-',
     }
-    if(param.kdDinas=='-')return _toast({bg:'e',msg:'Pilih Dinas !!!'});
-	if(_isNull(param.kdDinas))return _toast({bg:'e',msg:'Pilih Dinas !!!'});
+    // if(param.kdDinas=='-')return _toast({bg:'e',msg:'Pilih Dinas !!!'});
+	// if(_isNull(param.kdDinas))return _toast({bg:'e',msg:'Pilih Dinas !!!'});
     if(_isNull(param.username))return _toast({bg:'e',msg:'Tambahkan username !!!'});
     if(_isNull(param.password))return _toast({bg:'e',msg:'Tambahkan password !!!'});
     

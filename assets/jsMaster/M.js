@@ -2,6 +2,11 @@ function _log(nama,data){
     console.log(nama);
     console.log(data);
 }
+
+function extractNumbers(text) {
+  return (text.match(/\d+/g) || []).map(Number);
+}
+
 async function _post(url,data){
     _swal({
         type:'loading',
@@ -58,30 +63,52 @@ async function _postFile(url,data,img){
         text:'Mohon Menunggu...'
     });
     return new Promise(function(res){
+        // $.ajax({
+        //     type:'post',
+        //     url:router+url,
+        //     data:{
+        //             data:btoa(JSON.stringify(data)),
+        //             file:img,
+        //             code:btoa(myCode)
+        //         },
+        //     success:function(respon)
+        //     {
+        //         swal.clickCancel();
+        //         res(respon);
+        //     },
+        //     error:function(){
+        //         swal.clickCancel();
+        //         _toast({
+        //                 bg:'e',
+        //                 msg:'Proses bermasalah !!!'
+        //             })
+        //     },
+        //     timeOut:20000 // 20 detik
+        // })
         $.ajax({
-            type:'post',
-            url:router+url,
-            data:{
-                    data:btoa(JSON.stringify(data)),
-                    file:img,
-                    code:btoa(myCode)
-                },
-            success:function(respon)
-            {
-                swal.clickCancel();
+            type: 'POST',
+            url: router + url,
+            data: JSON.stringify({...data,dt:img,code:btoa(myCode)}),
+            contentType: 'application/json',
+            processData: false,
+            success: function(respon) {
+                try {
+                // const data = JSON.parse(respon);
                 res(respon);
+                } catch (e) {
+                console.error("Respon bukan JSON:", respon);
+                _toast({ bg: 'e', msg: 'Respon tidak valid!' });
+                }
             },
-            error:function(){
+            error: function() {
                 swal.clickCancel();
-                _toast({
-                        bg:'e',
-                        msg:'Proses bermasalah !!!'
-                    })
+                _toast({ bg: 'e', msg: 'Proses bermasalah !!!' });
             },
-            timeOut:20000 // 20 detik
-        })
+            timeout: 30000
+            });
     })
 }
+
 function _isNull(val){
     if(val==null || val.length==0){
         return true;
@@ -116,6 +143,31 @@ function _checkstrNum(val){
         res+=split[a];
     }
     return res;
+}
+function _checkStrQuery(str){ 
+    let split=str.split(`'`),res="";
+    if(split.length>1){
+        for(let a=0;a<split.length;a++){
+            if(a>0){
+                res+="&apos;";
+            }
+            res+=split[a];
+        }
+        return res;
+    } 
+    split=res.split(`"`);
+    res="";
+    if(split.length>1){
+        for(let a=0;a<split.length;a++){
+            if(a>0){
+                res+="&quot;";
+            }
+            res+=split[a];
+        }
+        return res;
+    }
+    return str; 
+    
 }
 function _search(data,search){
     if(data.trim().toUpperCase()==search.trim().toUpperCase()){

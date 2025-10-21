@@ -1,0 +1,26 @@
+[04-Apr-2024 17:28:15 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php:22
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php(22): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php on line 22
+[06-Apr-2024 06:50:28 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php:22
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php(22): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php on line 22
+[01-May-2024 22:56:32 UTC] PHP Notice:  Undefined index: judul in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/searchuserinfo.php on line 19
+[06-May-2024 05:50:22 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/ajax.php:3
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/form/ajax.php(3): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/ajax.php on line 3
+[07-May-2024 10:28:28 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php:22
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php(22): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php on line 22
+[07-May-2024 17:29:38 UTC] PHP Fatal error:  Uncaught PDOException: could not find driver in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php:22
+Stack trace:
+#0 /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php(22): PDO->__construct('odbc:DRIVER={Mi...')
+#1 {main}
+  thrown in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/search.php on line 22

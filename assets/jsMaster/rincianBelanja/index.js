@@ -10,20 +10,176 @@ function _onload(data){
     _.dsshx=data.dssh; // ssh yang berpproses
     _.sfKeyUpdate='';
     _.totalPagu=0;
+    _.noUser = data.noUser;
     _.act=Number(data.act);
+
+    _.kdBidang = data.kdBidang
 
 
     _.tahapan=data.tahapan;
     _.tahun=data.tahun;
     _.nmTahapan=data.nmTahapan;
+    _.totalRealisasi = 0;
     
-    $('#bodyTM').html(_form());
+    $('#bodyTM').html(newForm());
+    $('#bodyTM').css("background","#b4b4b436")
     $('#footer').html(data.tmFooter+data.footer);
     
     _tabelPreview(null);
     _startTabel("dt");
-    saveDynamicDataToFile();
-    // _startTabel("dtPreview");
+    // saveDynamicDataToFile();
+    // _startTabel("dtPreview"); 
+    
+
+    $('#lokasiP').val(_.drenstra.lokasiP);
+    $('#waktuP').val(_.drenstra.waktuP);
+    $('#kelompokS').val(_.drenstra.kelompokS);
+    $('#keluaran').val(_.drenstra.keluaran);
+    $('#hasil').val(_.drenstra.hasil);
+    $('#keluaranT').val(_.drenstra.keluaranT);
+    $('#hasilT').val(_.drenstra.hasilT); 
+    $(document).ready(function() { 
+        chartxx();
+    })
+    
+}
+function chartxx() {
+    _.Prealisasi = ((_.totalRealisasi/_.totalPagu)*100).toFixed(2);
+    $('#informasi').html(_infoBelanja()); 
+    const ctx = document.getElementById("bar").getContext("2d");
+    if(_.drenstra.dhasil.length!=0){
+        const dkeluaran = JSON.parse(_.drenstra.dkeluaran);
+        const dhasil = JSON.parse(_.drenstra.dhasil); 
+        const getValue = (arr, index) => arr[index] ?? 0;
+
+        const barChartData = {
+            labels: ["pelaksanaan", "dampak"],
+            datasets: [
+                {
+                    label: "Dataset 1",
+                    backgroundColor: "rgba(220,220,220,0.5)",
+                    borderColor: "rgba(220,220,220,1)",
+                    data: [getValue(dkeluaran, 0), getValue(dhasil, 0)]
+                },
+                {
+                    label: "Dataset 2",
+                    backgroundColor: "rgba(151,187,205,0.5)",
+                    borderColor: "rgba(151,187,205,1)",
+                    data: [getValue(dkeluaran, 1), getValue(dhasil, 1)]
+                }
+            ]
+        };
+
+
+        const config = {
+            type: "bar",
+            data: barChartData,
+            options: {
+            responsive: true,
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            }
+            }
+        };
+
+        new Chart(ctx, config);
+
+
+    }
+    $('#hero-donut').html('');
+    Morris.Donut({
+        element: 'hero-donut',
+        data: [
+        { label: "Total", value: _.totalPagu },
+        { label: "Realisasi", value: _.totalRealisasi }
+        ],
+        colors: ['#0B62A4', '#7A92A3'],
+        resize: true
+    });
+
+
+    param={ 
+        kdKeg:_.drenstra.kdKeg,
+        kdSub:_.drenstra.kdSub,
+        kdDinas:_.drenstra.kdDinas, 
+        prealisasi:_.Prealisasi
+    }
+
+    _postNoLoad('proses/setPersentaseSub',param).then(res=>{
+        res=JSON.parse(res);
+        if(res.exec){ 
+        }else{
+            return _toast({bg:'e', msg:res.msg});
+        }
+    }); 
+}
+function newForm() {
+    // <li><a href="#trash" data-toggle="tab"><i class="fa fa-trash-o"></i> Trash</a></li> 
+
+    return ` 
+        <div class="row p-6" style="margin-top: 6%; margin-left: 10px; width: 97%; font-size:15px;">
+            <div class="col-sm-3 " >
+            
+                <section class="panel">
+                    <div class="panel-body"> 
+                        <ul class="nav nav-pills nav-stacked mail-nav" role="tablist" style="flex-direction: column;">
+                            <li class="active"><a href="#monitor" data-toggle="tab"><i class="fa fa-inbox"></i>Monitoring</a></li>    
+                            <li class=""><a href="#informasi" data-toggle="tab"><i class="fa fa-inbox"></i>Informasi</a></li>
+                            <li><a href="#formIndikator" data-toggle="tab"><i class="fa fa-inbox"></i>Form Indikator</a></li>
+                           
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-sm-9">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="monitor">
+                        <div class="form-panel row">
+                            <div class="col-md-6">
+                                <h4 class="mb text-center">Monitoring Item Sub Kegiatan</h4>
+                                <canvas id="bar" height="100px"></canvas> 
+                            </div>
+                            <div  class="col-md-6">
+                                <h4 class="mb text-center">Serapan Anggaran</h4>
+                                <div id="hero-donut" class="graph"  style="height: 200px;"></div>
+                            </div> 
+                        </div> 
+                    </div> 
+                    <div class="tab-pane " id="informasi">
+                        ${_infoBelanja()}
+                    </div> 
+
+                    <div class="tab-pane" id="formIndikator">
+                        <div class="form-panel">
+                            <h4 class="mb">Form Indikator Kinerja</h4>
+                            ${
+                                _findikatorKinerjaUpd()
+                                +`<hr/>
+                                    <div class="row  pl-4">
+                                        ${_btn({
+                                                // color:"success shadow",
+                                                judul:"Simpan",
+                                                attr:"style='float:right; padding:5px;font-size: medium;' onclick='_goIndikatored()'",
+                                                class:"btn btn-primary"
+                                            })}
+                                    </div>
+                                `
+                            } 
+                            <h2 class="mb"></h2>
+                        </div> 
+                    </div> 
+                </div>
+            </div> 
+        </div> 
+        <hr/>
+            
+        ${_formPreview()}
+    `;
+ 
+    
 }
 function _form() {
     // <img class="img-fluid d-block mx-auto" src="`+assert+`fs_css/bgForm.png" alt="sasasa"></img>
@@ -45,7 +201,7 @@ function _infoBelanja() {
                     classJudul:' p-2',
                     id:"form1",
                     sizeCol:undefined,
-                    bgHeader:"bg-info text-light",
+                    bgHeader:"",
                     attrHeader:`style="height: max-content;"`,
                     bgForm:"#fff; font-size:15px;",
                     isi:_getInfoRenstra()
@@ -59,6 +215,9 @@ function _getInfoRenstra() {
     infoSupport.push({name:"Program",value:_.drenstra.nmProg});
     infoSupport.push({name:"Kegiatan",value:_.drenstra.nmKeg});
     infoSupport.push({name:"Sub Kegiatan",value:_.drenstra.nmSub});
+    infoSupport.push({name:"Total Pagu",value:_$(_.totalPagu)});
+    infoSupport.push({name:"Total Realisasi",value:_$(_.totalRealisasi)}); 
+    infoSupport.push({name:"Realisasi %",value:(_.Prealisasi+" %")}); 
     return _tbl2Col(infoSupport);
 }
 function _formBelanja(){
@@ -84,7 +243,7 @@ function _formBelanja(){
                     classJudul:' p-2',
                     id:"form1",
                     sizeCol:undefined,
-                    bgHeader:"bg-info text-light",
+                    bgHeader:"",
                     attrHeader:`style="height: max-content;"`,
                     bgForm:"#fff; font-size:15px;",
                     isi:`<div id="formAdd">`
@@ -134,12 +293,12 @@ function _formBelanja(){
 }
 function _formPreview(){
     infoSupport1=[];
-    infoSupport1.push({ 
-        clsBtn:`btn-warning fzMfc`
-        ,func:"_goIndikator()"
-        ,icon:`<i class="mdi mdi-file-check"></i>Indikator`
-        ,title:"Perbarui Indikator"
-    });
+    // infoSupport1.push({ 
+    //     clsBtn:`btn-warning fzMfc`
+    //     ,func:"_goIndikator()"
+    //     ,icon:`<i class="mdi mdi-file-check"></i>Indikator`
+    //     ,title:"Perbarui Indikator"
+    // });
     infoSupport1.push({ 
         clsBtn:`btn-primary fzMfc`
         ,func:"_lapoPDF()"
@@ -152,10 +311,10 @@ function _formPreview(){
         ,icon:`<i class="mdi mdi-file-check"></i>Excell`
         ,title:"Donwload Excell"
     });
-    return `<div class="row ml-2 shadow"  style="margin-top:20px;">`
+    return `<div class="row ml-2 shadow"  style="margin-top:20px;width: 98%;margin: 0px;padding: 20px;">`
                 +_formIcon({
                     icon:'<i class="mdi mdi-file-check"></i>'
-                    ,text:"<h3>Preview Renja</h3>",
+                    ,text:"<h3>Dokumen PA</h3>",
                     classJudul:' p-2',
                     id:"form1",
                     btn:_btnGroup(infoSupport1,0),
@@ -169,6 +328,8 @@ function _formPreview(){
             +`</div>`;
 }
 function _tabelPreview(data) {
+    _.totalRealisasi = 0;
+    _.totalPagu = 0;
     if(data!=null){
         $('#formSetting').html('');
         _.dtDetailRincian=data.dtDetailRincian;
@@ -179,6 +340,8 @@ function _tabelPreview(data) {
             ,isi:_previewRBelanja()
         })
     );
+    $('#informasi').html(_infoBelanja()); 
+    chartxx();
     // _startTabel("dtPreview");
 }
 
@@ -1024,7 +1187,7 @@ function _previewRBelanja(){
                             <button title="Hapus Rincian Rekening" class="btn btn-danger btn-sm" onclick="_deleteViewTabel(`+a+`)"><i class="mdi mdi-delete-forever"></i></button>
                         </div>`;
                     }else{
-                        html+=`<span class="badge badge-danger">TERKUNCI</span>`
+                        // html+=`<span class="badge badge-danger">TERKUNCI</span>`
                     }
                     
                     html+=`</td>
@@ -1032,11 +1195,16 @@ function _previewRBelanja(){
             `;
             judul=_.dtDetailRincian[a].nama;
         }
+        
         for(let b=0;b<_.dtDetailRincian[a].detail.length;b++){
+            if(_.dtDetailRincian[a].detail[b].realisasi>0){
+                _.totalRealisasi += parseFloat(_.dtDetailRincian[a].detail[b].jumlah);
+            }
+            const keyCair =  Number(_.dtDetailRincian[a].detail[b].realisasi);
             html+=`
                 <tr class="font-weight-bold">
                     <td class="pl-1"></td>
-                    <td class="flag4" width="30%">
+                    <td class="flag4 ${keyCair && 'text-success'}" width="30%">
                     - `+_.dtDetailRincian[a].detail[b].uraian+`
                     </td>
                     <td width="15%">
@@ -1053,6 +1221,11 @@ function _previewRBelanja(){
                     </td>
                     <td class="text-right pr-1">`+_$(_.dtDetailRincian[a].detail[b].jumlah)+`</td>
                     <td class="text-right">
+                        ${(
+                            keyCair == 0 ?
+                            `<button title="Tandai, dicairkan" class="btn btn-success btn-sm" onclick="_goCair(${a},${b})"><i class="fa fa-check-square"></i></button>`:
+                            (_.noUser ? `<button title="Tandai, belum dicairkan" class="btn btn-primary btn-sm" onclick="_salahCair(${a},${b})"><i class="fa fa-check-square"></i></button>`:'')
+                        )}
                     </td>
                 </tr>
             `;
@@ -1061,9 +1234,10 @@ function _previewRBelanja(){
     return html+"</tbody>";
 
 }
-function _getTotalAnak(anak,kode){
+function _getTotalAnak(anak,kode){ 
     let total=0;
     for(let a=0;a<_.dtDetailRincian.length;a++){
+        
         switch(anak){
             case 1:
                 if(_.dtDetailRincian[a].kdApbd2==kode){
@@ -1096,6 +1270,7 @@ function _getTotalAnak(anak,kode){
                 break
         }
     }
+    
     return total;
 }
 function _getDetailVolume(data){
@@ -1186,6 +1361,89 @@ function _lapoExcell() {
     _redirectOpen("laporan/rincianBelanja/"+data);
 }
 
+function _goCair(Ijudul, Idetail) {
+    _.Ijudul= Ijudul; 
+    _.Idetail=Idetail;
+    _modalEx1({
+        judul:"Konfirmasi Realisasi Anggaran".toUpperCase(),
+        icon:`<i class="mdi mdi-check"></i>`,
+        cform:`text-light`,
+        bg:"success",
+        minWidth:fsize+"; font-size: medium;",
+        isi:_inpGroupPrepend({
+                id:"Rdate",placeholder:"Tanggal Realisasi",
+                cls:'mt-4',attr:";",type:"date",icon:'<i class="mdi mdi-home"></i>',
+                bg:'bg-info text-light fzMfc',inpCls:"fzMfc"
+            }),
+        footer:_btn({
+                    color:"primary shadow",
+                    judul:"Close",
+                    attr:`style='float:right; padding:5px;font-size: medium;' onclick="_modalHide('modal')"`,
+                    class:"btn btn-secondary"
+                })
+                +_btn({
+                    // color:"success shadow",
+                    judul:"Simpan",
+                    attr:"style='float:right; padding:5px;font-size: medium;' onclick='_prosesCair()'",
+                    class:"btn btn-primary"
+                })
+    }); 
+}
+function _salahCair(Ijudul, Idetail){
+    _.Ijudul= Ijudul; 
+    _.Idetail=Idetail;
+    _modalEx1({
+        judul:"Konfirmasi ".toUpperCase(),
+        icon:`<i class="mdi mdi-note-plus"></i>`,
+        cform:`text-light`,
+        bg:"bg-primary ",
+        minWidth:"500px; font-size: medium; color:gray;",
+        isi:`Data ini memang belum direalisasikan ?`,
+        footer:_btn({
+                    judul:"Close",
+                    attr:`style='float:right; padding:5px;font-size: medium;' onclick="_modalHide('modal')"`,
+                    class:"btn btn-secondary shadow"
+                })
+                +_btn({
+                    judul:"PROSES",
+                    attr:"style='float:right; padding:5px;font-size: medium;' onclick='_prosesCair(0)'",
+                    class:"btn btn-primary shadow"
+                })
+    });
+}
+function _prosesCair(cair=1) {
+    let pdate ='';
+    if(cair ==1){
+        pdate = $('#Rdate').val();
+    }
+    param={ 
+        kdSub:_.drenstra.kdSub,
+        kdDinas:_.drenstra.kdDinas,
+        tahapan:Number(_.tahapan), 
+        date:pdate,
+        cair,
+        tahun:_.tahun,
+        kdJudul:_.dtDetailRincian[_.Ijudul].kdJudul,
+        kdRincian:_.dtDetailRincian[_.Ijudul].detail[_.Idetail].kdRincian,
+        status:_.dtDetailRincian[_.Ijudul].detail[_.Idetail].status
+    }
+    // return console.log(param);
+    
+    if(_isNull(param.date) && cair==1)return _toast({bg:'e',msg:'Tambahkan Tanggal Realisasi Anggaran !!!'}); 
+
+    _post('proses/prosesCair',param).then(res=>{
+        res=JSON.parse(res);
+        if(res.exec){
+            _modalHide('modal');
+            // return _toast({bg:'i', msg:"indikator talah diperbarui"});
+            // _reload();
+            _.dtDetailRincian[_.Ijudul].detail[_.Idetail].realisasi =cair;
+            _tabelPreview();
+        }else{
+            return _toast({bg:'e', msg:res.msg});
+        }
+    });
+}
 function _goIndikator() {
     _modalEx1({
         judul:"Konfirmasi".toUpperCase(),
@@ -1239,6 +1497,19 @@ function _goIndikatored() {
     if(_isNull(param.keluaranT))return _toast({bg:'e',msg:'Tambahkan Target Keluaran !!!'});
     if(_isNull(param.hasilT))return _toast({bg:'e',msg:'Tambahkan Target Hasil !!!'});
 
+    try {
+        const keluaran = extractNumbers(param.keluaran+" "+param.keluaranT);
+        const hasil = extractNumbers(param.hasil+" "+param.hasilT);
+        
+        param.dkeluaran =JSON.stringify(keluaran);
+        param.dhasil =JSON.stringify(hasil);
+
+        if(keluaran.length !=2) throw new Error('monitoring pelaksanaan kegiatan, Keluaran - target harus diisi !!!');
+        if(hasil.length !=2) throw new Error('evaluasi dampak program, hasil - target harus diisi !!!');
+
+    } catch (error) {
+        _toast({bg:'e',msg:error.message});
+    }
     _post('proses/saveExpBelanjaPersatu',param).then(res=>{
         res=JSON.parse(res);
         if(res.exec){

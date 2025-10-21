@@ -28,6 +28,10 @@
         // kdUrusan untuk membantu filter data depan 
         return "select kdBidang as value, nmBidang as valueName,kdUrusan from pbidang ".$where;
     }
+    function _cbBidangDinas($where){
+        // kdUrusan untuk membantu filter data depan 
+        return "select kdDBidang as value, nmBidang as valueName from dinas_bidang ".$where;
+    }
     function _renstraOpd($kodeDinas,$tahun,$where){
         return 'SELECT 
             a.kdSub,a.nmSub,a.qpra,a.qrka,a.qrkaFinal,a.lokasiP,a.waktuP,a.kelompokS,a.keluaran,a.hasil,a.keluaranT,a.hasilT
@@ -42,6 +46,40 @@
             as totalRKA
             ,(SELECT SUM(total) FROM ubjudul WHERE kdSub=a.kdSub AND kdDinas=a.kdDinas AND tahapan="3" and taJudul=a.taSub) 
             as totalRKAFINAL
+        FROM psub a 
+            JOIN pkegiatan b 
+                ON a.kdKeg	=b.kdKeg
+                and a.taSub=b.taKeg
+            JOIN pprogram c 
+                ON b.kdProg 	=c.kdProg
+                and c.taProg=b.taKeg
+            JOIN pbidang d
+                ON c.kdBidang		=d.kdBidang
+                and c.taProg=d.taBidang
+            JOIN purusan e
+                ON d.kdUrusan		=e.kdUrusan
+                and e.taUrusan=d.taBidang
+            Join dinas f
+                ON a.kdDinas=f.kdDinas
+        WHERE a.kdDinas="'.$kodeDinas.'" and a.taSub="'.$tahun.'" '.$where.'
+        GROUP BY a.kdSub,a.kdKeg,b.kdProg,a.kdDinas
+        ORDER BY a.kdSub asc
+        ';
+    }
+    function _renstraOpdBidang($kodeDinas,$tahun,$where){
+        return 'SELECT 
+            a.kdSub,a.nmSub,a.qpra,a.qrka,a.qrkaFinal,a.lokasiP,a.waktuP,a.kelompokS,a.keluaran,a.hasil,a.keluaranT,a.hasilT
+            ,b.kdKeg,b.nmKeg
+            ,c.kdProg,c.nmProg
+            ,d.kdBidang,d.nmBidang
+            ,e.kdUrusan,e.nmUrusan
+            ,f.kdDinas,f.nmDinas
+            ,a.kdBidang
+            ,(SELECT SUM(total) FROM ubjudul WHERE kdSub=a.kdSub AND kdDinas=a.kdDinas AND tahapan="1" and taJudul=a.taSub) 
+            as totalPRARKA
+            ,a.dhasil
+            ,a.dkeluaran
+            ,a.prealisasi
         FROM psub a 
             JOIN pkegiatan b 
                 ON a.kdKeg	=b.kdKeg
@@ -163,6 +201,40 @@
             -- limit 10
         ';
     }
+    function _renstraOpdBidangGet($kdDinas,$kdbidang,$tahun,$where){ 
+        return '
+            select a.kdSub,a.nmSub
+                ,b.kdKeg	,b.nmKeg
+                ,c.kdProg	,c.nmProg
+                ,d.kdBidang    ,d.nmBidang
+                ,e.kdUrusan	    ,e.nmUrusan,
+                a.kdBidang
+                ,(
+                        CASE 
+                            WHEN a.kdBidang !=0 THEN 1
+                            ELSE 0
+                        END
+                ) as checked
+                , 0 as upd
+            FROM psub a 
+            JOIN pkegiatan b 
+                ON a.kdKeg	=b.kdKeg
+                and a.taSub=b.taKeg
+            JOIN pprogram c 
+                ON b.kdProg 	=c.kdProg
+                and c.taProg=b.taKeg
+            JOIN pbidang d
+                ON c.kdBidang		=d.kdBidang
+                and c.taProg=d.taBidang
+            JOIN purusan e
+                ON d.kdUrusan		=e.kdUrusan
+                and e.taUrusan=d.taBidang
+            where a.taSub="'.$tahun.'" '.$where.'
+            GROUP BY a.kdSub,a.kdKeg,c.kdProg
+            ORDER BY a.kdSub asc
+            -- limit 10
+        ';
+    }
     function _dssh($where){
         return "
             SELECT `id`, `nama`, `spesifikasi` as keterangan, `satuan`, `harga`,`kodeRekening` FROM `ssh` ".$where."
@@ -219,7 +291,7 @@
                     and k.taApbd1=j.taApbd2
             WHERE b.kdSub="'.$v['kdSub'].'" and a.tahapan="'.$v['tahapan'].'" and a.kdDinas="'.$v['kdDinas'].'" and 
                 a.taJudul="'.$v['tahun'].'" and a.status=1
-            GROUP BY b.kdSub,c.kdKeg,d.kdProg,a.kdDinas,e.kdApbd6,a.nama 
+            GROUP BY b.kdSub,c.kdKeg,d.kdProg,a.kdDinas,e.kdApbd6,a.kdJudul
             ORDER BY b.kdSub,c.kdKeg,d.kdProg
         ';
     }
@@ -239,7 +311,7 @@
         return 'select  `kdRincian`, `kdJudul`, `uraian`, `total` as jumlah
             , `jumlah1`, `jumlah2`, `jumlah3`, `satuan1`
             , `satuan2`, `satuan3`, `volume`, `satuanVol`
-            , `harga` ,"sudah" as status,qdel,idSsh
+            , `harga` ,"sudah" as status,qdel,idSsh,realisasi
             from ubrincian 
             where kdJudul="'. $v['kdJudul'].'" and taRincian="'. $v['tahun'].'" and tahapan="'.$v['tahapan'].'"
             and kdSub="'. $v['kdSub'].'" and kdDinas="'. $v['kdDinas'].'"

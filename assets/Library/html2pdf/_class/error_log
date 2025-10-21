@@ -1,0 +1,2 @@
+[04-Apr-2024 17:31:25 UTC] PHP Warning:  Use of undefined constant HTML2PDF_USED_TCPDF_VERSION - assumed 'HTML2PDF_USED_TCPDF_VERSION' (this will throw an Error in a future version of PHP) in /home/bapped13/public_html/apps/assets/Library/html2pdf/_class/tcpdfConfig.php on line 65
+[20-May-2024 04:38:58 UTC] PHP Warning:  Use of undefined constant HTML2PDF_USED_TCPDF_VERSION - assumed 'HTML2PDF_USED_TCPDF_VERSION' (this will throw an Error in a future version of PHP) in /home/bapped13/public_html/apps/assets/Library/html2pdf/_class/tcpdfConfig.php on line 65

@@ -1,0 +1,3 @@
+[13-May-2024 11:34:08 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/ompu/index.php on line 155
+[13-May-2024 11:34:08 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, bool given in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/ompu/index.php on line 157
+[13-May-2024 11:34:08 UTC] PHP Warning:  mysqli_fetch_array() expects parameter 1 to be mysqli_result, null given in /home/bapped13/public_html/apps/assets/Library/html2pdf/form/ompu/index.php on line 159

@@ -557,6 +557,7 @@
         // $CI->mbg->_gdate("d-m-yy");
         $dinas=$dt['dinas'][0];
         $today = getdate();
+        
         return $html.'
                 <tr class="font-weight-bold">
                     <td colspan="3">Keterangan :</td>
@@ -576,35 +577,40 @@
         $CI =& get_instance();
         $textC='style="text-align:center;"';
         $textR='style="text-align:right;"';
-        $html='<br><br>
-        <table cellspacing="0" cellpadding="1" border="1" style="font-size:10px;">
-            <thead style="font-size: small;">
-                <tr '.$textC.'>
-                    <th rowspan="3" width="10%">Kode Rekening</th>
-                    <th rowspan="3" width="10%">Uraian</th>
-                    <th colspan="5" width="34%">Sebelum Pergeseran</th>
-                    <th colspan="5" width="34%">Setelah Pergeseran</th>
-                    <th rowspan="3" width="12%">+ / (-)</th>
-                </tr>
-                <tr '.$textC.'>
-                    <th colspan="4" width="24%">Rincian Perhitungan</th>
-                    <th rowspan="2" width="10%">Jumlah</th>
-                    <th colspan="4" width="24%">Rincian Perhitungan</th>
-                    <th rowspan="2" width="10%">Jumlah</th>
-                </tr>
-                <tr '.$textC.'>
-                    <th width="7%">koefisien</th>
-                    <th width="7%">Sat</th>
-                    <th width="7%">Harga</th>
-                    <th width="3%">PPN</th>
-                    <th width="7%">koefisien</th>
-                    <th width="7%">Sat</th>
-                    <th width="7%">Harga</th>
-                    <th width="3%">PPN</th>
-                </tr>
-            </thead>
-            <tbody>';
+        $header='
+            <table cellspacing="0" cellpadding="1" border="1" style="font-size:10px;">
+                <thead style="font-size: small;">
+                    <tr '.$textC.'>
+                        <th rowspan="3" width="10%">Kode Rekening</th>
+                        <th rowspan="3" width="10%">Uraian</th>
+                        <th colspan="5" width="34%">Sebelum Pergeseran</th>
+                        <th colspan="5" width="34%">Setelah Pergeseran</th>
+                        <th rowspan="3" width="12%">+ / (-)</th>
+                    </tr>
+                    <tr '.$textC.'>
+                        <th colspan="4" width="24%">Rincian Perhitungan</th>
+                        <th rowspan="2" width="10%">Jumlah</th>
+                        <th colspan="4" width="24%">Rincian Perhitungan</th>
+                        <th rowspan="2" width="10%">Jumlah</th>
+                    </tr>
+                    <tr '.$textC.'>
+                        <th width="7%">koefisien</th>
+                        <th width="7%">Sat</th>
+                        <th width="7%">Harga</th>
+                        <th width="3%">PPN</th>
+                        <th width="7%">koefisien</th>
+                        <th width="7%">Sat</th>
+                        <th width="7%">Harga</th>
+                        <th width="3%">PPN</th>
+                    </tr>
+                </thead>
+                <tbody>
+        ';
+        $html='<br><br>'.$header;
         $kdApbd6="";$judul="";$kdSDana="";$kdApbd1="";$kdApbd2="";$kdApbd3="";$kdApbd4="";$kdApbd5="";
+        
+        // 7|18
+        $jumlahPage =0;
         foreach ($dt['dtDetailRincian'] as $a => $v) {
             // if($a==0){ //for sub kegiatan saja
             //     $html.='
@@ -620,7 +626,7 @@
                 $ftnow=_getTotalAnak(0,$v['kdApbd1'],$dt['dtDetailRincian']);
                 $ftot=$ftnow-$ftold;
                 $ftotR=$ftot;
-                
+                $jumlahPage++;
                 // $fpagu=_getTotalAnak(0,$v['kdApbd1'],$dt['dtDetailRincian']);
                 if($pdf){
                     $ftold=$CI->mbgs->_uang($ftold);
@@ -656,7 +662,7 @@
                 $ftnow=_getTotalAnak(1,$v['kdApbd2'],$dt['dtDetailRincian']);
                 $ftot=$ftnow-$ftold;
                 $ftotR=$ftot;
-                
+                $jumlahPage++;
                 // $fpagu=_getTotalAnak(0,$v['kdApbd1'],$dt['dtDetailRincian']);
                 if($pdf){
                     $ftold=$CI->mbgs->_uang($ftold);
@@ -683,7 +689,7 @@
                 $ftnow=_getTotalAnak(2,$v['kdApbd3'],$dt['dtDetailRincian']);
                 $ftot=$ftnow-$ftold;
                 $ftotR=$ftot;
-                
+                $jumlahPage++;
                 // $fpagu=_getTotalAnak(0,$v['kdApbd1'],$dt['dtDetailRincian']);
                 if($pdf){
                     $ftold=$CI->mbgs->_uang($ftold);
@@ -710,7 +716,7 @@
                 $ftnow=_getTotalAnak(3,$v['kdApbd4'],$dt['dtDetailRincian']);
                 $ftot=$ftnow-$ftold;
                 $ftotR=$ftot;
-                
+                $jumlahPage++;
                 // $fpagu=_getTotalAnak(0,$v['kdApbd1'],$dt['dtDetailRincian']);
                 if($pdf){
                     $ftold=$CI->mbgs->_uang($ftold);
@@ -737,7 +743,7 @@
                 $ftnow=_getTotalAnak(4,$v['kdApbd5'],$dt['dtDetailRincian']);
                 $ftot=$ftnow-$ftold;
                 $ftotR=$ftot;
-                
+                $jumlahPage++;
                 // $fpagu=_getTotalAnak(0,$v['kdApbd1'],$dt['dtDetailRincian']);
                 if($pdf){
                     $ftold=$CI->mbgs->_uang($ftold);
@@ -759,14 +765,12 @@
                 ';
                 $kdApbd5=$v['kdApbd5'];
             }
-    
-            
             if($kdApbd6!=$v['kdApbd6']){
                 $ftold=_getTotalAnakOld(5,$v['kdApbd6'],$dt['dtDetailRincian']);
                 $ftnow=_getTotalAnak(5,$v['kdApbd6'],$dt['dtDetailRincian']);
                 $ftot=$ftnow-$ftold;
                 $ftotR=$ftot;
-                
+                $jumlahPage++;
                 // $fpagu=_getTotalAnak(0,$v['kdApbd1'],$dt['dtDetailRincian']);
                 if($pdf){
                     $ftold=$CI->mbgs->_uang($ftold);
@@ -808,7 +812,7 @@
                 $ftnow=$v['jumlah'];
                 $ftot=$ftnow-$ftold;
                 $ftotR=$ftot;
-                
+                $jumlahPage++;
                 // $fpagu=_getTotalAnak(0,$v['kdApbd1'],$dt['dtDetailRincian']);
                 if($pdf){
                     $ftold=$CI->mbgs->_uang($ftold);
@@ -899,14 +903,58 @@
                         <td '.$textR.'>'.($ftotR>=0? $ftot:"(".$ftot.")").'</td>
                     </tr>
                 ';
+                $jumlahPage++;
             }
         }
         // $CI->mbg->_gdate("d-m-yy");
         $dinas=$dt['dinas'][0];
-        $today = getdate();
+        $today = getdate(); 
+        
+        
+        $countBr=9;
+        if($jumlahPage>7){
+          $jumlahPage-=7;
+        }
+        $sisaJP=$jumlahPage%18;
+        if($sisaJP>0){
+            // if($countBr>$sisaJP){
+            //     $countBr-=$sisaJP;
+            // }else{
+            //     $countBr=0;
+            // }
+            $countBr=0;
+        }
+        $br='';
+        for($a=1;$a<=$countBr;$a++){
+            $br.='<br>';
+        }
+        if($sisaJP==0){
+            $br.=$header;
+        }
+        
+        if($sisaJP==0){
+            return $html.'
+                    </tbody>
+                </table>
+                
+                <table cellspacing="0" cellpadding="1" border="1" style="font-size:10px;">
+                    '.$br.'
+                    <tr class="font-weight-bold">
+                        <td colspan="7">Keterangan :</td>
+                        <td colspan="6"  '.$textC.'>
+                            <br><br>
+                            Taliwang '.$today['mday'].' '.$CI->mbgs->_getBulan($today['mon']).' '.$today['year'].'<br>
+                            '.$dinas['nmDinas'].' <br><br><br> <br><br>
+                            '.$dinas['kadis'].'<br>
+                            NIP.'.$dinas['nip'].'<br>
+                        </td>
+                    </tr>
+                </table> 
+            ';
+        }
         return $html.'
-                <tr class="font-weight-bold">
-                    <td colspan="7">Keterangan :</td>
+                <tr class="font-weight-bold" style="page-break-after: always">
+                    <td colspan="7">Keterangan : </td>
                     <td colspan="6" '.$textC.'>
                         <br><br>
                         Taliwang '.$today['mday'].' '.$CI->mbgs->_getBulan($today['mon']).' '.$today['year'].'<br>
@@ -970,10 +1018,14 @@
         }
         return $total;
     }
-    function _getTotalAnakOld($anak,$kode,$data){
+    
+    function _getTotalAnakOld($anak,$kode,$data){ 
         $total=0;
         for($a=0;$a<count($data);$a++){
             if($data[$a]['qdel']){
+                if (count($data[$a]['qdel'])==0) {
+                    return 0;
+                }
                 switch($anak){
                     case 1:
                         if($data[$a]['kdApbd2']==$kode){
