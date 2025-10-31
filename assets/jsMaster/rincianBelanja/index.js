@@ -20,7 +20,7 @@ function _onload(data){
     _.tahun=data.tahun;
     _.nmTahapan=data.nmTahapan;
     _.totalRealisasi = 0;
-    
+    _.bulan = data.bulan;
     $('#bodyTM').html(newForm());
     $('#bodyTM').css("background","#b4b4b436")
     $('#footer').html(data.tmFooter+data.footer);
@@ -44,6 +44,7 @@ function _onload(data){
     
 }
 function chartxx() {
+    // _.Prealisasi = ((_.totalRealisasi/_.totalPagu)*100).toFixed(2);
     _.Prealisasi = ((_.totalRealisasi/_.totalPagu)*100).toFixed(2);
     $('#informasi').html(_infoBelanja()); 
     const ctx = document.getElementById("bar").getContext("2d");
@@ -53,7 +54,7 @@ function chartxx() {
         const getValue = (arr, index) => arr[index] ?? 0;
 
         const barChartData = {
-            labels: ["pelaksanaan", "dampak"],
+            labels: ["pelaksanaan kegiatan", "dampak program"],
             datasets: [
                 {
                     label: "Dataset 1",
@@ -143,7 +144,7 @@ function newForm() {
                                 <canvas id="bar" height="100px"></canvas> 
                             </div>
                             <div  class="col-md-6">
-                                <h4 class="mb text-center">Serapan Anggaran</h4>
+                                <h4 class="mb text-center">Serapan Anggaran (${_.bulan})</h4>
                                 <div id="hero-donut" class="graph"  style="height: 200px;"></div>
                             </div> 
                         </div> 
@@ -210,6 +211,7 @@ function _infoBelanja() {
 }
 function _getInfoRenstra() {
     infoSupport=[];
+    infoSupport.push({name:"Data",value:_.bulan+" "+_.tahun});
     infoSupport.push({name:"Urusan",value:_.drenstra.nmUrusan});
     infoSupport.push({name:"Bidang",value:_.drenstra.nmBidang});
     infoSupport.push({name:"Program",value:_.drenstra.nmProg});
@@ -1042,18 +1044,13 @@ function _previewRBelanja(){
     var html=`
         <thead style="font-size: small;">
             <tr class="text-center align-middle bg-gray-200">
-                <th rowspan="2" width="10%">Kode Rekening</th>
-                <th rowspan="2" width="30%">Uraian</th>
-                <th rowspan="2" width="15%">Detail Volume</th>
-                <th colspan="3" width="30%">Rincian Perhitungan</th>
-                <th rowspan="2" width="10%">Jumlah</th>
-                <th rowspan="2" width="5%">Aksi</th>
+                <th  width="10%">Kode Rekening</th>
+                <th  width="45%">Uraian</th> 
+                <th  width="15%">Pagu</th>
+                <th   width="15%">Realisasi</th>
+                <th   width="15%">Aksi</th>
             </tr>
-            <tr class="text-center align-middle bg-gray-200">
-                <th width="10%">Vol</th>
-                <th width="10%">Sat</th>
-                <th width="10%">Harga Satuan</th>
-            </tr>
+           
         </thead>
         <tbody>`;
     var kdApbd6="",judul="",kdSDana="",kdApbd1="",kdApbd2="",kdApbd3="",kdApbd4="",kdApbd5;
@@ -1062,23 +1059,21 @@ function _previewRBelanja(){
             html+=`
                 <tr class="font-weight-bold">
                     <td width="10%"></td>
-                    <td colspan="5" width="75%">`+_.dtDetailRincian[a].kdSub+` - `+_.dtDetailRincian[a].nmSub+`</td>
-                    <td class="text-right" width="10%"></td>
-                    <td class="text-center" width="5%"></td>
+                    <td colspan="3" width="75%">`+_.dtDetailRincian[a].kdSub+` - `+_.dtDetailRincian[a].nmSub+`</td>
+                    <td class="text-center" width="15%"></td>
                 </tr>
             `;
         }
         if(kdApbd1!=_.dtDetailRincian[a].kdApbd1){
-            _.totalPagu=_getTotalAnak(0,_.dtDetailRincian[a].kdApbd1);
+            _.totalPagu=_getTotalAnakReal(0,_.dtDetailRincian[a].kdApbd1);
+             _.totalRealisasi=_getTotalAnak(0,_.dtDetailRincian[a].kdApbd1);
             html+=`
                 <tr class="font-weight-bold">
                     <td class="pl-1">`+_.dtDetailRincian[a].kdApbd1+`</td>
-                    <td colspan="5" class="flag1">
-                    `+_.dtDetailRincian[a].nmApbd1+`
-                    </td>               
-                    <td class="text-right">`+_$(_getTotalAnak(0,_.dtDetailRincian[a].kdApbd1))+`</td>
-                    <td class="text-right">
-                    </td>
+                    <td class="flag1">`+_.dtDetailRincian[a].nmApbd1+`</td>               
+                    <td class="text-right">`+_$(_.totalPagu)+`</td>
+                    <td class="text-right">`+_$(_.totalRealisasi)+`</td>
+                    <td class="text-right"></td>
                 </tr>
             `;
             kdApbd1=_.dtDetailRincian[a].kdApbd1;
@@ -1087,9 +1082,10 @@ function _previewRBelanja(){
             html+=`
                 <tr class="font-weight-bold">
                     <td class="pl-1">`+_.dtDetailRincian[a].kdApbd2+`</td>
-                    <td colspan="5" class="flag1">
+                    <td class="flag1">
                     `+_.dtDetailRincian[a].nmApbd2+`
                     </td>               
+                    <td class="text-right">`+_$(_getTotalAnakReal(1,_.dtDetailRincian[a].kdApbd2))+`</td>
                     <td class="text-right">`+_$(_getTotalAnak(1,_.dtDetailRincian[a].kdApbd2))+`</td>
                     <td class="text-right">
                     </td>
@@ -1101,9 +1097,10 @@ function _previewRBelanja(){
             html+=`
                 <tr class="font-weight-bold">
                     <td class="pl-1">`+_.dtDetailRincian[a].kdApbd3+`</td>
-                    <td colspan="5" class="flag1">
+                    <td class="flag1">
                     `+_.dtDetailRincian[a].nmApbd3+`
                     </td>               
+                    <td class="text-right">`+_$(_getTotalAnakReal(2,_.dtDetailRincian[a].kdApbd3))+`</td>
                     <td class="text-right">`+_$(_getTotalAnak(2,_.dtDetailRincian[a].kdApbd3))+`</td>
                     <td class="text-right">
                     </td>
@@ -1115,9 +1112,10 @@ function _previewRBelanja(){
             html+=`
                 <tr class="font-weight-bold">
                     <td class="pl-1">`+_.dtDetailRincian[a].kdApbd4+`</td>
-                    <td colspan="5" class="flag1">
+                    <td class="flag1">
                     `+_.dtDetailRincian[a].nmApbd4+`
                     </td>               
+                    <td class="text-right">`+_$(_getTotalAnakReal(3,_.dtDetailRincian[a].kdApbd4))+`</td>
                     <td class="text-right">`+_$(_getTotalAnak(3,_.dtDetailRincian[a].kdApbd4))+`</td>
                     <td class="text-right">
                     </td>
@@ -1129,9 +1127,10 @@ function _previewRBelanja(){
             html+=`
                 <tr class="font-weight-bold">
                     <td class="pl-1">`+_.dtDetailRincian[a].kdApbd5+`</td>
-                    <td colspan="5" class="flag1">
+                    <td class="flag1">
                     `+_.dtDetailRincian[a].nmApbd5+`
                     </td>               
+                    <td class="text-right">`+_$(_getTotalAnakReal(4,_.dtDetailRincian[a].kdApbd5))+`</td>
                     <td class="text-right">`+_$(_getTotalAnak(4,_.dtDetailRincian[a].kdApbd5))+`</td>
                     <td class="text-right">
                     </td>
@@ -1145,9 +1144,10 @@ function _previewRBelanja(){
             html+=`
                 <tr class="font-weight-bold">
                     <td class="pl-1">`+_.dtDetailRincian[a].kdApbd6+`</td>
-                    <td colspan="5" class="flag1">
+                    <td class="flag1">
                     `+_.dtDetailRincian[a].nmApbd6+`
                     </td>               
+                    <td class="text-right">`+_$(_getTotalAnakReal(5,_.dtDetailRincian[a].kdApbd6))+`</td>
                     <td class="text-right">`+_$(_getTotalAnak(5,_.dtDetailRincian[a].kdApbd6))+`</td>
                     <td class="text-right">
                     </td>
@@ -1155,37 +1155,39 @@ function _previewRBelanja(){
             `;
             kdApbd6=_.dtDetailRincian[a].kdApbd6;
         } 
-        if(kdSDana!=_.dtDetailRincian[a].kdSDana){
-            html+=`
-                <tr class="font-weight-bold">
-                    <td class="pl-1"></td>
-                    <td colspan="5" class="flag1">
-                    `+_.dtDetailRincian[a].nmSDana+`
-                    </td>               
-                    <td class="text-right"></td>
-                    <td class="text-right">
-                    </td>
-                </tr>
-            `;
-            kdSDana=_.dtDetailRincian[a].kdSDana;
-        }       
+        // if(kdSDana!=_.dtDetailRincian[a].kdSDana){
+        //     html+=`
+        //         <tr class="font-weight-bold">
+        //             <td class="pl-1"></td>
+        //             <td colspan="5" class="flag1">
+        //             `+_.dtDetailRincian[a].nmSDana+`
+        //             </td>               
+        //             <td class="text-right"></td>
+        //             <td class="text-right">
+        //             </td>
+        //         </tr>
+        //     `;
+        //     kdSDana=_.dtDetailRincian[a].kdSDana;
+        // }       
         if(judul!=_.dtDetailRincian[a].nama){
             html+=`
                 <tr style="background-color: lightblue;">
                     <td class="pl-1"></td>
-                    <td colspan="5" class="flag4">
+                    <td class="flag4">
                     `+_.dtDetailRincian[a].nama+`
                     </td>
+                    <td class="text-right pr-1">`+_$(_.dtDetailRincian[a].pagu)+`</td>
                     <td class="text-right pr-1">`+_$(_.dtDetailRincian[a].jumlah)+`</td>
                     <td class="text-right">`;
                     if(!_.act){
                         // if(_.dtDetailRincian[0].keyForPraRka=="0"){
                         
-                        html+=`
-                        <div style="margin:auto">
-                            <button title="Edit Rincian Rekening" class="btn btn-warning btn-sm" onclick="_setEditViewTabel(`+a+`)"><i class="mdi mdi-grease-pencil"></i></button>
-                            <button title="Hapus Rincian Rekening" class="btn btn-danger btn-sm" onclick="_deleteViewTabel(`+a+`)"><i class="mdi mdi-delete-forever"></i></button>
-                        </div>`;
+                        html+=`<button title="Tandai, dicairkan" class="btn btn-success btn-sm" onclick="_goUPBelanja(${a})"><i class="fa fa-check-square"></i></button>`;
+                        // html+=`
+                        // <div style="margin:auto">
+                        //     <button title="Edit Rincian Rekening" class="btn btn-warning btn-sm" onclick="_setEditViewTabel(`+a+`)"><i class="mdi mdi-grease-pencil"></i></button>
+                        //     <button title="Hapus Rincian Rekening" class="btn btn-danger btn-sm" onclick="_deleteViewTabel(`+a+`)"><i class="mdi mdi-delete-forever"></i></button>
+                        // </div>`;
                     }else{
                         // html+=`<span class="badge badge-danger">TERKUNCI</span>`
                     }
@@ -1196,40 +1198,40 @@ function _previewRBelanja(){
             judul=_.dtDetailRincian[a].nama;
         }
         
-        for(let b=0;b<_.dtDetailRincian[a].detail.length;b++){
-            if(_.dtDetailRincian[a].detail[b].realisasi>0){
-                _.totalRealisasi += parseFloat(_.dtDetailRincian[a].detail[b].jumlah);
-            }
-            const keyCair =  Number(_.dtDetailRincian[a].detail[b].realisasi);
-            html+=`
-                <tr class="font-weight-bold">
-                    <td class="pl-1"></td>
-                    <td class="flag4 ${keyCair && 'text-success'}" width="30%">
-                    - `+_.dtDetailRincian[a].detail[b].uraian+`
-                    </td>
-                    <td width="15%">
-                        `+_getDetailVolume(_.dtDetailRincian[a].detail[b])+`
-                    </td>
-                    <td width="10%">
-                        `+_.dtDetailRincian[a].detail[b].volume+`
-                    </td>
-                    <td width="10%">
-                        `+_.dtDetailRincian[a].detail[b].satuanVol+`
-                    </td>
-                    <td width="10%">
-                        `+_$(_.dtDetailRincian[a].detail[b].harga)+`
-                    </td>
-                    <td class="text-right pr-1">`+_$(_.dtDetailRincian[a].detail[b].jumlah)+`</td>
-                    <td class="text-right">
-                        ${(
-                            keyCair == 0 ?
-                            `<button title="Tandai, dicairkan" class="btn btn-success btn-sm" onclick="_goCair(${a},${b})"><i class="fa fa-check-square"></i></button>`:
-                            (_.noUser ? `<button title="Tandai, belum dicairkan" class="btn btn-primary btn-sm" onclick="_salahCair(${a},${b})"><i class="fa fa-check-square"></i></button>`:'')
-                        )}
-                    </td>
-                </tr>
-            `;
-        }
+        // for(let b=0;b<_.dtDetailRincian[a].detail.length;b++){
+        //     if(_.dtDetailRincian[a].detail[b].realisasi>0){
+        //         _.totalRealisasi += parseFloat(_.dtDetailRincian[a].detail[b].jumlah);
+        //     }
+        //     const keyCair =  Number(_.dtDetailRincian[a].detail[b].realisasi);
+        //     html+=`
+        //         <tr class="font-weight-bold">
+        //             <td class="pl-1"></td>
+        //             <td class="flag4 ${keyCair && 'text-success'}" width="30%">
+        //             - `+_.dtDetailRincian[a].detail[b].uraian+`
+        //             </td>
+        //             <td width="15%">
+        //                 `+_getDetailVolume(_.dtDetailRincian[a].detail[b])+`
+        //             </td>
+        //             <td width="10%">
+        //                 `+_.dtDetailRincian[a].detail[b].volume+`
+        //             </td>
+        //             <td width="10%">
+        //                 `+_.dtDetailRincian[a].detail[b].satuanVol+`
+        //             </td>
+        //             <td width="10%">
+        //                 `+_$(_.dtDetailRincian[a].detail[b].harga)+`
+        //             </td>
+        //             <td class="text-right pr-1">`+_$(_.dtDetailRincian[a].detail[b].jumlah)+`</td>
+        //             <td class="text-right">
+        //                 ${(
+        //                     keyCair == 0 ?
+        //                     `<button title="Tandai, dicairkan" class="btn btn-success btn-sm" onclick="_goCair(${a},${b})"><i class="fa fa-check-square"></i></button>`:
+        //                     (_.noUser ? `<button title="Tandai, belum dicairkan" class="btn btn-primary btn-sm" onclick="_salahCair(${a},${b})"><i class="fa fa-check-square"></i></button>`:'')
+        //                 )}
+        //             </td>
+        //         </tr>
+        //     `;
+        // }
     }
     return html+"</tbody>";
 
@@ -1266,6 +1268,45 @@ function _getTotalAnak(anak,kode){
             default:
                 if(_.dtDetailRincian[a].kdApbd1==kode){
                     total+=parseFloat(_.dtDetailRincian[a].jumlah);
+                }
+                break
+        }
+    }
+    
+    return total;
+}
+function _getTotalAnakReal(anak,kode){ 
+    let total=0;
+    for(let a=0;a<_.dtDetailRincian.length;a++){
+        
+        switch(anak){
+            case 1:
+                if(_.dtDetailRincian[a].kdApbd2==kode){
+                    total+=parseFloat(_.dtDetailRincian[a].pagu);
+                }
+            break
+            case 2:
+                if(_.dtDetailRincian[a].kdApbd3==kode){
+                    total+=parseFloat(_.dtDetailRincian[a].pagu);
+                }
+            break;
+            case 3:
+                if(_.dtDetailRincian[a].kdApbd4==kode){
+                    total+=parseFloat(_.dtDetailRincian[a].pagu);
+                }
+            break
+            case 4:
+                if(_.dtDetailRincian[a].kdApbd5==kode){
+                    total+=parseFloat(_.dtDetailRincian[a].pagu);
+                }
+            break;
+            case 5:
+                if(_.dtDetailRincian[a].kdApbd6==kode){
+                    total+=parseFloat(_.dtDetailRincian[a].pagu);
+                }
+            default:
+                if(_.dtDetailRincian[a].kdApbd1==kode){
+                    total+=parseFloat(_.dtDetailRincian[a].pagu);
                 }
                 break
         }
@@ -1361,6 +1402,63 @@ function _lapoExcell() {
     _redirectOpen("laporan/rincianBelanja/"+data);
 }
 
+function _goUPBelanja(Ijudul) {
+    _.Ijudul= Ijudul;  
+    _modalEx1({
+        judul:"Perbarui Realisasi Anggaran".toUpperCase(),
+        icon:`<i class="mdi mdi-check"></i>`,
+        cform:`text-light`,
+        bg:"success",
+        minWidth:fsize+"; font-size: medium;",
+        isi:`<p>${_.dtDetailRincian[_.Ijudul].nama}</p>`
+            +_inpGroupPrepend({
+                id:"nowjumlah",placeholder:_.dtDetailRincian[_.Ijudul].jumlah,
+                cls:'mt-4',attr:";",type:"number",icon:'<i class="mdi mdi-home"></i>',
+                bg:'bg-info text-light fzMfc',inpCls:"fzMfc"
+            }),
+        footer:_btn({
+                    color:"primary shadow",
+                    judul:"Close",
+                    attr:`style='float:right; padding:5px;font-size: medium;' onclick="_modalHide('modal')"`,
+                    class:"btn btn-secondary"
+                })
+                +_btn({
+                    // color:"success shadow",
+                    judul:"Simpan",
+                    attr:"style='float:right; padding:5px;font-size: medium;' onclick='_goUPBelanjaed()'",
+                    class:"btn btn-primary"
+                })
+    }); 
+}
+function _goUPBelanjaed() {
+    let nowjumlah = $('#nowjumlah').val();
+    param={ 
+        kdSub:_.drenstra.kdSub,
+        kdDinas:_.drenstra.kdDinas,
+        tahapan:Number(_.tahapan),  
+        jumlah:nowjumlah,
+        tahun:_.tahun,
+        kdJudul:_.dtDetailRincian[_.Ijudul].kdJudul
+    }
+    // return console.log(param);
+    
+    if(_isNull(param.jumlah))return _toast({bg:'e',msg:'Tambahkan Nominal Realisasi Belanja !!!'}); 
+
+    if(param.jumlah>_.dtDetailRincian[_.Ijudul].pagu)return _toast({bg:'e',msg:'nominal melebihi maksimal Realisasi !!!'}); 
+
+    _post('proses/updRealisasiBelanja',param).then(res=>{
+        res=JSON.parse(res);
+        if(res.exec){
+            _modalHide('modal');
+            // return _toast({bg:'i', msg:"indikator talah diperbarui"});
+            // _reload();
+            _.dtDetailRincian[_.Ijudul].jumlah = nowjumlah;
+            _tabelPreview();
+        }else{
+            return _toast({bg:'e', msg:res.msg});
+        }
+    });
+}
 function _goCair(Ijudul, Idetail) {
     _.Ijudul= Ijudul; 
     _.Idetail=Idetail;

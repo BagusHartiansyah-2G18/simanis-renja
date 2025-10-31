@@ -853,3 +853,27 @@ function _textCenter(v){
     </div>
     `;
 }
+
+function _inpDropdonwSelectedJJin(params){
+    const {idInp,onFocus,idMenu,idOpsMenu,ops} = params; 
+    return `
+        <div class="dropdown" style="width: 100%; position: relative;">
+            <input type="text"
+                class="form-control fzMfc"
+                id="${idInp}"
+                placeholder="Cari satuan..."
+                onfocus="_showForDropSelect('${idMenu}')"
+                oninput="_formSearch${idMenu}(this,'${idOpsMenu}')"
+                style="background-color:#283941; color:white;" />
+
+            <div class="dropdown-menu" id="${idMenu}" style="width: 100%; margin: 0px; display: none;">
+            <div style="overflow:auto; max-height:200px" id="${idOpsMenu}"> 
+                ${ops}
+            </div>
+            </div>
+        </div> 
+    `;
+}
+function _showForDropSelect(id) {
+    document.getElementById(id).style.display = "block";
+}

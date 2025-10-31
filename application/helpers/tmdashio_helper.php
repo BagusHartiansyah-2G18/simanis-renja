@@ -129,26 +129,47 @@
             "ha"=>$user,
             "subMenu"=>[
                 [
-                    "url"=>$router."control/lapoOpd",
-                    "menu"=>"OPD",
+                    "url"=>$router."control/lapoSerapan",
+                    "menu"=>"Serapan Anggaran",
                     "ha"=>$user,
                     "status"=>""
-                ],[
-                    "url"=>$router."control/lapoBelanja",
-                    "menu"=>"Rekap Belanja",
-                    "ha"=>$admin,
-                    "status"=>""
-                ],[
-                    "url"=>$router."laporan/lapoBelanjaAllOpd",
-                    "menu"=>"Rekap Total Belanja ",
-                    "ha"=>$admin,
-                    "status"=>""
-                ],[
-                    "url"=>$router."control/lapoPaguSub",
-                    "menu"=>"Rekap Kegiatan",
-                    "ha"=>$admin,
-                    "status"=>""
+                // ],[
+                //     "url"=>$router."control/lapoBelanja",
+                //     "menu"=>"Rekap Belanja",
+                //     "ha"=>$admin,
+                //     "status"=>""
+                // ],[
+                //     "url"=>$router."laporan/lapoBelanjaAllOpd",
+                //     "menu"=>"Rekap Total Belanja ",
+                //     "ha"=>$admin,
+                //     "status"=>""
+                // ],[
+                //     "url"=>$router."control/lapoPaguSub",
+                //     "menu"=>"Rekap Kegiatan",
+                //     "ha"=>$admin,
+                //     "status"=>""
                 ]
+                // [
+                //     "url"=>$router."control/lapoOpd",
+                //     "menu"=>"OPD",
+                //     "ha"=>$user,
+                //     "status"=>""
+                // ],[
+                //     "url"=>$router."control/lapoBelanja",
+                //     "menu"=>"Rekap Belanja",
+                //     "ha"=>$admin,
+                //     "status"=>""
+                // ],[
+                //     "url"=>$router."laporan/lapoBelanjaAllOpd",
+                //     "menu"=>"Rekap Total Belanja ",
+                //     "ha"=>$admin,
+                //     "status"=>""
+                // ],[
+                //     "url"=>$router."control/lapoPaguSub",
+                //     "menu"=>"Rekap Kegiatan",
+                //     "ha"=>$admin,
+                //     "status"=>""
+                // ]
             ]
 
         ]);
@@ -191,7 +212,7 @@
         
         
         // return print_r($p['kdJab'])
-        if($p['kdJab']>1){
+        if($p['kdJab']==3){
             $menuSupport=array();
             array_push($menuSupport,[
                 "nm"=>"Import DPA",

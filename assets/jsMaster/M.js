@@ -92,8 +92,8 @@ async function _postFile(url,data,img){
             contentType: 'application/json',
             processData: false,
             success: function(respon) {
-                try {
-                // const data = JSON.parse(respon);
+                try { 
+                swal.clickCancel();
                 res(respon);
                 } catch (e) {
                 console.error("Respon bukan JSON:", respon);

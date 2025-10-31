@@ -205,9 +205,9 @@
         function _html($v){
             // System local BAPPEDA LITBANG Kabupaten Sumbawa Barat
             $nmAPP=$this->app['nm'];
-            if(!$v['qlogin']){
-                $nmAPP="BAPPEDA KSB";
-            }
+            // if(!$v['qlogin']){
+            //     $nmAPP="BAPPEDA KSB";
+            // }
             return "
             <!DOCTYPE html>
             <html>

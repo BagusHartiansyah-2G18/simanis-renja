@@ -149,7 +149,7 @@ function newInfo(persen) {
                 </div>
                 <div class="details">
                     <p style="display: flex;justify-content: space-between;">
-                        <b>${v.nm}</b>  <muted>${(v.persentse =='NaN'?0:v.persentse)} %</muted>
+                        <b>${v.nm}</b>  <muted>${(v.persentse =='NaN'?0:v.persentse)} %</muted> 
                     </p>
                 </div>
             </div>
@@ -160,7 +160,7 @@ function newInfo(persen) {
             <!--COMPLETED ACTIONS DONUTS CHART-->
             <div class="donut-main">
               <h4>Progres Serapan Anggaran ${persen.length>2?"SKPD":"Bidang"}</h4>
-              <h5>${all} of 100 %</h5>
+              <h5>${all} of 100 % [${_.bulan}] <br/><b>${_$(_.totalPagu)}</b></h5>
               <canvas id="newchart" height="162" width="162" style="width: 130px; height: 130px;"></canvas>
               <script>
                 var doughnutData = [{

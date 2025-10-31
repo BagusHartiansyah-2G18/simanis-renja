@@ -152,7 +152,8 @@ class Control extends CI_Controller {
                 'tahun'=>0,
                 'sistem'=>'renja'
             );
-          
+
+            
             // $res=$this->mbgs->_getAllFile("/fs_sistem/session");
             // $this->mbgs->_removeFile($res,$this->mbgs->_getIpClient()."=");
             
@@ -165,7 +166,7 @@ class Control extends CI_Controller {
             $this->sess->set_userdata($sess);
             $nama=$member[0]['kdMember'];
         }else{
-            // $this->_keamanan("Bagus H");
+            // $this->_keamanan("Bagus H"); 
             if($this->sess->kdMember==null) {
                 return $this->logout();
             }
@@ -185,6 +186,7 @@ class Control extends CI_Controller {
         // return print_r($this->sess->kdMember1);
         $this->_['page']="dashboard";
         $this->_['html']=$this->mbgs->_html($this->_);
+        
 		$this->load->view('index',$this->_);
     }
     public function setsub(){
@@ -273,6 +275,21 @@ class Control extends CI_Controller {
         if($portal['exec']){
             $nama=$this->sess->nmMember;
             $this->_['page']="lapoOpd";
+            $this->_['html']=$this->mbgs->_html($this->_);
+            $this->load->view('index',$this->_);
+        }else{
+            if($portal['msg']=="session"){
+                return $this->logout();
+            }else{
+                return $this->dashboard("null");
+            }
+        } 
+    }
+    public function lapoSerapan(){
+        $portal=$this->_keamanan(_getNKA("p-lapo",false));
+        if($portal['exec']){
+            $nama=$this->sess->nmMember;
+            $this->_['page']="lapoSerapan";
             $this->_['html']=$this->mbgs->_html($this->_);
             $this->load->view('index',$this->_);
         }else{

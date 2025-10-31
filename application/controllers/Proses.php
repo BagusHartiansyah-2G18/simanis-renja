@@ -6,12 +6,15 @@ class Proses extends CI_Controller {
     function __construct(){
         parent::__construct();
         $this->_=array();
-        
+        $this->load->model('Mkategori');
+        $this->load->model('Msop');
+
         
         $this->kdMember=$this->sess->kdMember;
         $this->nmMember=$this->sess->nmMember;
-        $this->kdJabatan=$this->sess->kdMemberJabatan;
+        $this->kdJabatan=$this->sess->kdJabatan;
         $this->kdDinas=$this->sess->kdDinas;
+        $this->kdBidang = $this->sess->kdBidang;
         $this->tahun=$this->sess->tahun;
 
         $this->qtbl=_getNKA("c-prod",true);
@@ -139,6 +142,26 @@ class Proses extends CI_Controller {
             return $this->mbgs->resTrue($this->_);
         }
     }
+    public function addKategori(){ 
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }else{
+            $baseEND=json_decode((base64_decode($_POST['data'])));
+            $values   =[
+                "nmKate"=>$baseEND->{'judul'},
+                "sumber"=>$this->kdMember
+            ];
+            $this->_['id']= $this->Mkategori->add($values);
+            
+            if($this->_['id']>0){
+                return $this->mbgs->resTrue($this->_);
+            }else{
+                return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
+            }
+        }
+    }
+    
+
     function expBelanjaPersatu(){
         if($this->sess->kdMember==null){
             return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
@@ -934,6 +957,35 @@ class Proses extends CI_Controller {
         }
         return $this->mbgs->resFalse("terjadi kesalahan pada proses tersebut !!!");
     }
+    function updRealisasiBelanja(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }
+        $baseEND=json_decode((base64_decode($_POST['data'])));
+        
+        $kdJudul    =$baseEND->{'kdJudul'};
+        $kdSub    =$baseEND->{'kdSub'};
+        $kdDinas    =$baseEND->{'kdDinas'};
+
+        $tahapan    =$baseEND->{'tahapan'};
+        $jumlah    =$baseEND->{'jumlah'};
+        $tahun =$baseEND->{'tahun'}; 
+        date_default_timezone_set("Asia/Jakarta");
+        $month = date("m");
+
+        $check=$this->qexec->_proc("update ubjudul set total='".$jumlah."' where 
+                kdSub='".$kdSub."'
+                and kdDinas='".$kdDinas."'
+                and tahapan='".$tahapan."'
+                and kdJudul='".$kdJudul."'
+                and taJudul='".$tahun."' 
+                and bulan='".$month."'
+        ");
+        if($check){
+            return $this->mbgs->resTrue($this->_);
+        }
+        return $this->mbgs->resFalse("terjadi kesalahan pada proses tersebut !!!");
+    }
 
     function setPersentaseSub() {
         if($this->sess->kdMember==null){
@@ -987,6 +1039,30 @@ class Proses extends CI_Controller {
             return $this->mbgs->resFalse("terjadi kesalahan pada proses tersebut !!!");
         }else{
             return $this->mbgs->resFalse("Password Lama,tidak sesuai !!!");
+        }
+    }
+
+    public function realisasiPerMount(){
+        $kondisi=false;
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }else{
+            $baseEND=json_decode((base64_decode($_POST['data'])));
+            $bulan   =$baseEND->{'bulan'};
+            
+            $qbidang = " and kdDBidang='".$this->kdBidang."'";
+            $wherebidang = " and a.kdBidang='".$this->kdBidang."'";
+            if($this->kdJabatan==2){ 
+                $qbidang = "";
+                $wherebidang = "";
+            }elseif($this->kdJabatan==3){
+                $qbidang = "";
+                $wherebidang = ""; 
+            }
+ 
+            // return print_r(_renstraOpdBidang($this->kdDinas,$this->tahun,$wherebidang,$bulan));
+            $this->_['data']=$this->qexec->_func(_renstraOpdBidang($this->kdDinas,$this->tahun,$wherebidang,$bulan));
+            return $this->mbgs->resTrue($this->_);
         }
     }
 
@@ -1052,13 +1128,28 @@ class Proses extends CI_Controller {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true); 
         $dt = $data['dt']; 
-        $bulan = $data['bulan']; 
-         
+        $bulan = $data['bulan'];  
+        $qaddSub = "";
         if(count($data)>0){
-            $qdel="delete from ubjudul where kdDinas='".$this->kdDinas."' and taJudul='".$this->tahun."' and tahapan=1; and bulan='".$bulan."'; ";
+            $qdel="delete from ubjudul where kdDinas='".$this->kdDinas."' and taJudul='".$this->tahun."' and bulan='".$bulan."'; ";
+            if($bulan=="1"){
+                $qdel.="delete from psub where kdDinas='".$this->kdDinas."' and taSub='".$this->tahun."'";
+                $qaddSub =" insert into psub (kdDinas,kdKeg,kdSub,nmSub,taSub,pagu) values ";
+            }
             $q=" insert into ubjudul (kdDinas, kdSub, kdApbd6, kdJudul, nama, taJudul,total,tahapan,bulan,pagu) values";
-            foreach ($dt as $key => $v) {
+            foreach ($dt as $key => $v) { 
                 $i = 1;
+                if($bulan=="1"){ 
+                    $qaddSub.=" 
+                    (
+                        '".$this->kdDinas."',
+                        '".substr($v['kd'],0,12)."', 
+                        '".$v['kd']."',
+                        '".$v['nm']."',
+                        '".$this->tahun."',
+                        '".$v['pagu']."'
+                    ),";
+                }
                 foreach ($v['judul'] as $k => $val) {
                     $code = explode("-",$val['kode_unik']);
                     $q.=" 
@@ -1079,9 +1170,13 @@ class Proses extends CI_Controller {
                 }
                 
             }
-            $q = substr($q,0,strlen($q)-1); 
+            $q = substr($q,0,strlen($q)-1)."; "; 
             $check=$this->qexec->_multiProc($qdel);
             if($check){
+                if($bulan=="1"){ 
+                    $q.=substr($qaddSub,0,strlen($qaddSub)-1).";";
+                } 
+                // return print_r($q);
                 $check=$this->qexec->_multiProc($q);
                 if($check){
                     return $this->mbgs->resTrue($this->_); 
@@ -1182,14 +1277,57 @@ class Proses extends CI_Controller {
         }
         return $q;
     }
+    function addSop(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }
+        $input = json_decode(file_get_contents("php://input"), true);
+
+        // $baseEND=json_decode((base64_decode($_POST['data'])));
+    
+        // return print_r($baseEND);
+        $judul=$input['judul'];
+        $kategori  =$input['kategori'];
+        $kdBidang   =$input['kdBidang']; 
+        
+        $file=$input['dt'];
+        $namaFile="";
+        if(!empty($file)){
+            $namaFile.=",file='";
+            foreach ($file as $key => $v) {
+                // $namaFile.=$this->_uploadImage($v['src'],$v['nama'])."<2G18>";
+                $namaFile=$this->_uploadFiles($v['data'],$v['nama']);
+            }
+            $namaFile.="";
+
+        }
+
+        $this->_['data'] = [
+            "kdDinas"=>$this->kdDinas,
+            "kdBidang"=>$kdBidang,
+            "kategori"=>$kategori,
+            "judul"=>$judul,
+            "file"=>$namaFile
+        ];
+        // return print_r($this->_['data'] );
+        $id = $this->Msop->add($this->_['data']);
+        
+        if($id>0){
+            $this->_['data']['id']=$id;
+            return $this->mbgs->resTrue($this->_);
+        }else{
+            return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
+        } 
+        
+    }
     public function _uploadFiles($file,$nama){
         $pdf_decoded = base64_decode($file,true);
         $nama=explode(".",$nama);
         date_default_timezone_set("America/New_York");
         $namaFile=$nama[count($nama)-2]."-".date("Y-m-d-h-i-sa").".".$nama[count($nama)-1];
-        $lokasiFile='./assets/fs_sistem/upload/files/'.$namaFile;
-        file_put_contents($lokasiFile, $pdf_decoded);
-        return substr($lokasiFile,2);
+        $lokasiFile='/fs_sistem/upload/files/'.$namaFile;
+        file_put_contents("./assets".$lokasiFile, $pdf_decoded);
+        return substr($lokasiFile,1);
     }
 
 

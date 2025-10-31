@@ -13,8 +13,9 @@ function _onload(data){
     // _.bidang=data.bidang;
     // _.kdBidang=_.bidang[0].value;
     // _.ind=0;
+    _.totalPagu = 0;
     _.tahun=data.tahun;
-
+    _.bulan=data.bulan;
     _.persentse =[];
     try {
         _.persentse.push({
@@ -63,9 +64,7 @@ function _form() {
     //         +_formData()
     //     +`</div>
     // </div>
-    return ` 
-        
-        
+    return `  
         <div class="col-lg-9 main-chart" style="margin-top: 4%;"> 
             ${_formData()}
         </div>
@@ -81,6 +80,7 @@ function _formData() {
                     classJudul:' p-2',
                     id:"form1",
                     sizeCol:undefined,
+                    
                     bgHeader:"bg-info text-light",
                     attrHeader:`style="height: max-content;"`,
                     bgForm:"#fff; font-size:15px;",
@@ -114,6 +114,7 @@ function _formData() {
             +`</div>`;
 }
 function setTabel(){
+    _.totalPagu = 0;
     html=`
       <thead style="font-size: small;">
         <tr>            
@@ -135,6 +136,7 @@ function setTabel(){
       </tfoot>
       <tbody style="font-size: small;">`;
         _.dinas[_.ind].data.forEach((v,i) => {
+            _.totalPagu += Number(v.totalPRARKA);
             fkondisi=false;
             if(_.kdBidang == v.kdBidang || _.kdBidang=="all"){
                 fkondisi=true;

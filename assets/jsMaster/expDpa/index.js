@@ -66,14 +66,15 @@ function _formData() {
                     isi:
                         _inpComboBox({
                             judul:"Pilih Bulan",
-                            id:"kdDinas",
+                            // id:"kdDinas",
+                            id:"kdBulan",
                             color:"black",  
                             data:bulan,
                             change:"_changeSubOPD(this)",
                             bg:"bg-warning text-dark",
                             method:"sejajar",
                             attr:"font-size:15px;",
-                            index:true
+                            // index:true
                         })
                         +(
                             _.dinas[_.ind].sub != undefined ?
@@ -359,7 +360,8 @@ function onReaderLoad(event){
 function _respon(data){
     if(data!=null){
         _.files=data;
-        _.kdDinas = data.kode_skpd; 
+        _.kdDinas = data.kode_skpd;  
+        rangkumData();
     } 
 
     // $('#tabelShow').html(`<pre>${JSON.stringify(_.files)}`);
@@ -584,8 +586,10 @@ function uploadFileed() {
 function uploadFileedNew() {
      _postFile('proses/saveImportJsonRealisasi',{bulan:_.bulan},rangkumDataClean()).then(res=>{
         res=JSON.parse(res);
+        _modalHide('modal');
         if(res.exec){ 
-            resolve({})
+            _toast({ bg: 'i', msg: 'sukses' });
+            // resolve({})
         }else{
             return _toast({bg:'e', msg:res.msg});
         }
@@ -726,7 +730,7 @@ function rangkumData() {
                             break;
                             case 17: 
                                 if(_.kdDinas.substring(0,3)==v.kode_akun.substring(0,3)){
-                                    resp.urus.u5.push({kd:v.kode_akun, nm:v.nama_akun});
+                                    resp.urus.u5.push({kd:v.kode_akun, nm:v.nama_akun,pagu:v.alokasi_anggaran});
                                 }else{
                                     resp.judul.push(v);
                                     resp.rek.l6.push({kd:v.kode_akun, nm:v.nama_akun});
@@ -738,11 +742,21 @@ function rangkumData() {
                     }
                 });
             } catch (error) {
-                console.log(_.files[x]);
+                // console.log(_.files[x]);
                 
             }
         }
     });
+    // console.log(bersihkanDuplikat(resp.urus.u4).map(v=>`('${v.kd.substring(0,7)}','${v.kd}', '${v.nm}','2025')`).join(","));
+    // console.log(bersihkanDuplikat(resp.urus.u3).map(v=>`('${v.kd.substring(0,4)}','${v.kd}', '${v.nm}','2025')`).join(","));
+    // console.log(resp.rek);
+    
+    // console.log(bersihkanDuplikat(resp.rek.l1).map(v=>`(''${v.kd}', '${v.nm}','2025')`).join(","));
+    // console.log(bersihkanDuplikat(resp.rek.l2).map(v=>`('${v.kd}','${v.kd.substring(0,1)}', '${v.nm}','2025')`).join(","));
+    // console.log(bersihkanDuplikat(resp.rek.l3).map(v=>`('${v.kd}','${v.kd.substring(0,3)}', '${v.nm}','2025')`).join(","));
+    // console.log(bersihkanDuplikat(resp.rek.l4).map(v=>`('${v.kd}','${v.kd.substring(0,6)}', '${v.nm}','2025')`).join(","));
+    // console.log(bersihkanDuplikat(resp.rek.l5).map(v=>`('${v.kd}','${v.kd.substring(0,9)}', '${v.nm}','2025')`).join(","));
+    // console.log(bersihkanDuplikat(resp.rek.l6).map(v=>`('${v.kd}','${v.kd.substring(0,12)}', '${v.nm}','2025')`).join(","));
     return resp;
 }
 function rangkumDataClean() {

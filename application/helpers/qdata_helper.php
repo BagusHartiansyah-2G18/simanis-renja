@@ -66,7 +66,7 @@
         ORDER BY a.kdSub asc
         ';
     }
-    function _renstraOpdBidang($kodeDinas,$tahun,$where){
+    function _renstraOpdBidang($kodeDinas,$tahun,$where,$bulan="1"){
         return 'SELECT 
             a.kdSub,a.nmSub,a.qpra,a.qrka,a.qrkaFinal,a.lokasiP,a.waktuP,a.kelompokS,a.keluaran,a.hasil,a.keluaranT,a.hasilT
             ,b.kdKeg,b.nmKeg
@@ -75,8 +75,10 @@
             ,e.kdUrusan,e.nmUrusan
             ,f.kdDinas,f.nmDinas
             ,a.kdBidang
-            ,(SELECT SUM(total) FROM ubjudul WHERE kdSub=a.kdSub AND kdDinas=a.kdDinas AND tahapan="1" and taJudul=a.taSub) 
+            ,(SELECT SUM(pagu) FROM ubjudul WHERE kdSub=a.kdSub AND kdDinas=a.kdDinas AND tahapan="1" and taJudul=a.taSub and bulan="'.$bulan.'") 
             as totalPRARKA
+            ,(SELECT SUM(total) FROM ubjudul WHERE kdSub=a.kdSub AND kdDinas=a.kdDinas AND tahapan="1" and taJudul=a.taSub and bulan="'.$bulan.'") 
+            as totalR
             ,a.dhasil
             ,a.dkeluaran
             ,a.prealisasi
@@ -96,6 +98,37 @@
             Join dinas f
                 ON a.kdDinas=f.kdDinas
         WHERE a.kdDinas="'.$kodeDinas.'" and a.taSub="'.$tahun.'" '.$where.'
+        GROUP BY a.kdSub,a.kdKeg,b.kdProg,a.kdDinas
+        ORDER BY a.kdSub asc
+        ';
+    }
+    function _renstraOpdBidangAutoTahun($kodeDinas,$bulan="1"){
+        return 'SELECT  
+            a.kdBidang
+            ,(SELECT SUM(pagu) FROM ubjudul WHERE kdSub=a.kdSub AND kdDinas=a.kdDinas AND tahapan="1" and taJudul=a.taSub and bulan="'.$bulan.'") 
+            as totalPRARKA
+            ,(SELECT SUM(total) FROM ubjudul WHERE kdSub=a.kdSub AND kdDinas=a.kdDinas AND tahapan="1" and taJudul=a.taSub and bulan="'.$bulan.'") 
+            as totalR,
+            a.taSub
+        FROM psub a 
+            join tahun g 
+                on a.taSub=g.nama
+                and g.selected=1
+            JOIN pkegiatan b 
+                ON a.kdKeg	=b.kdKeg
+                and a.taSub=b.taKeg
+            JOIN pprogram c 
+                ON b.kdProg 	=c.kdProg
+                and c.taProg=b.taKeg
+            JOIN pbidang d
+                ON c.kdBidang		=d.kdBidang
+                and c.taProg=d.taBidang
+            JOIN purusan e
+                ON d.kdUrusan		=e.kdUrusan
+                and e.taUrusan=d.taBidang
+            Join dinas f
+                ON a.kdDinas=f.kdDinas
+        WHERE a.kdDinas="'.$kodeDinas.'" 
         GROUP BY a.kdSub,a.kdKeg,b.kdProg,a.kdDinas
         ORDER BY a.kdSub asc
         ';
@@ -229,7 +262,7 @@
             JOIN purusan e
                 ON d.kdUrusan		=e.kdUrusan
                 and e.taUrusan=d.taBidang
-            where a.taSub="'.$tahun.'" '.$where.'
+            where a.taSub="'.$tahun.'" and a.kdDinas="'.$kdDinas.'" '.$where.' 
             GROUP BY a.kdSub,a.kdKeg,c.kdProg
             ORDER BY a.kdSub asc
             -- limit 10
@@ -246,7 +279,7 @@
         // ,b.keyForPraRka,b.keyForRKA,b.keyForRkaFinal
         return '
             SELECT 
-                a.nama,a.total as jumlah,a.dateUpdate,a.kdJudul,a.kdSDana,a.qdel
+                a.nama,a.total as jumlah,a.pagu,a.dateUpdate,a.kdJudul,a.kdSDana,a.qdel
                 ,b.kdSub	,b.nmSub,0 as keyForPraRka,0 as keyForRKA,0 as keyForRkaFinal
                 ,c.kdKeg	,c.nmKeg
                 ,d.kdProg	,d.nmProg
@@ -269,7 +302,7 @@
                 JOIN pprogram d 
                     ON c.kdProg=d.kdProg
                     and c.taKeg=d.taProg
-                JOIN sumberdana f 
+                left JOIN sumberdana f 
                     ON a.kdSDana=f.kdSDana
                 LEFT JOIN apbd6 e
                     ON a.kdApbd6=e.kdApbd6
@@ -291,6 +324,7 @@
                     and k.taApbd1=j.taApbd2
             WHERE b.kdSub="'.$v['kdSub'].'" and a.tahapan="'.$v['tahapan'].'" and a.kdDinas="'.$v['kdDinas'].'" and 
                 a.taJudul="'.$v['tahun'].'" and a.status=1
+                and a.bulan="'.$v['bulan'].'"
             GROUP BY b.kdSub,c.kdKeg,d.kdProg,a.kdDinas,e.kdApbd6,a.kdJudul
             ORDER BY b.kdSub,c.kdKeg,d.kdProg
         ';

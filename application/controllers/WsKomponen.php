@@ -5,7 +5,8 @@ class WsKomponen extends CI_Controller {
     function __construct(){
         parent::__construct();	
         // $this->load->helper('url','html_helper','mbgs_helper');
-
+        $this->load->model('Mkategori');
+        $this->load->model('Msop');
         $this->load->helper("tmdashio_helper");
         $this->mbgs->_setBaseUrl(base_url());
         
@@ -274,6 +275,16 @@ class WsKomponen extends CI_Controller {
         $this->_['footer'] .=$this->mbgs->_getJsTabel();
 
         $this->_['tahun']=$this->qexec->_func(_tahunForOption(""));
+        
+        $this->_['bidang']=$this->qexec->_func("select kdDBidang as kdBidang,nmBidang,asBidang,nm,nip,img from dinas_bidang where kdDinas ='".$this->kdDinas."'");
+         
+        date_default_timezone_set("Asia/Jakarta");
+        $month = date("m");
+        $this->_['month']= $month;
+        $this->_['bulan']=$this->mbgs->_getBulan($month);  
+        
+        $this->_['data']=$this->qexec->_func(_renstraOpdBidangAutoTahun($this->kdDinas,$month));
+
         // $this->_['dinas']=$this->qexec->_func(_cbDinas(" where kdDinas='".$this->kdDinas."'"));
         return print_r(json_encode($this->_));
     }
@@ -353,14 +364,16 @@ class WsKomponen extends CI_Controller {
         $this->_['footer'].=$this->mbgs->_getJsChart();
         $this->_['footer'] .=$this->mbgs->_getJsTabel();
 
-       $this->_['dinas']=$this->qexec->_func(_cbDinas(" where kdDinas='".$this->kdDinas."'"));
+        $this->_['dinas']=$this->qexec->_func(_cbDinas(" where kdDinas='".$this->kdDinas."'"));
         $qbidang = " and kdDBidang='".$this->kdBidang."'";
         $wherebidang = " and a.kdBidang='".$this->kdBidang."'";
         if($this->kdJabatan==2){
             $gadmin=$this->qexec->_func(_cbDinasForAG($this->kdMember1,""));
             if(count($gadmin)>0){
-                $this->_['dinas']=$gadmin;
+                // $this->_['dinas']=$gadmin;
+                
             }
+            $this->_['dinas']=$this->qexec->_func(_cbDinas(""));
             $qbidang = "";
             $wherebidang = "";
         }elseif($this->kdJabatan==3){
@@ -381,9 +394,13 @@ class WsKomponen extends CI_Controller {
             $this->_['bidang']=$this->qexec->_func(_cbBidangDinas(" where taDBidang='".$this->tahun."' and kdDinas='".$this->kdDinas."' ".$qbidang." "));
         }
         
-        
-        $this->_['tahun']=$this->tahun; 
-        $this->_['dinas'][0]['data']=$this->qexec->_func(_renstraOpdBidang($this->_['dinas'][0]['value'],$this->tahun,$wherebidang));
+        date_default_timezone_set("Asia/Jakarta");
+        $month = date("m");
+        $this->_['bulan']=$this->mbgs->_getBulan($month); 
+    
+        $this->_['tahun']=$this->tahun;  
+        // return print_r(_renstraOpdBidang($this->_['dinas'][0]['value'],$this->tahun,$wherebidang));
+        $this->_['dinas'][0]['data']=$this->qexec->_func(_renstraOpdBidang($this->_['dinas'][0]['value'],$this->tahun,$wherebidang,$month));
 
         // $this->_['dinas'][0]['tsub']=$this->qexec->_func(_tsub($this->_['dinas'][0]['value'],$this->tahun,""))[0]['total'];
         // $this->_['dinas'][0]['tsubProses']=count($this->qexec->_func(_tsubProses($this->_['dinas'][0]['value'],$this->tahun,"")));
@@ -417,6 +434,18 @@ class WsKomponen extends CI_Controller {
         $this->_['footer'].=$this->mbgs->_getJsChart();
         $this->_['footer'] .=$this->mbgs->_getJsTabel();
 
+        
+        $this->_['bidang']=$this->qexec->_func(_cbBidangDinas(" where taDBidang='".$this->tahun."' and kdDinas='".$this->kdDinas."'"));
+        $this->_['kategori']=$this->Mkategori->cb();
+
+        $this->_['isAdm']  = false;
+        $kdBidang =$this->kdBidang;
+        if($this->kdJabatan>1){
+            $kdBidang ="";
+            $this->_['isAdm']  = true;
+        }
+        
+        $this->_['sop']=$this->Msop->all($kdBidang);
         
         // $this->_['dinas'][0]['tpaguPra']=$this->qexec->_func(_tpagu($this->_['dinas'][0]['value'],"1",$this->tahun,""))[0]['total'];
         // $this->_['dinas'][0]['tpaguRka']=$this->qexec->_func(_tpagu($this->_['dinas'][0]['value'],"2",$this->tahun,""))[0]['total'];
@@ -493,14 +522,29 @@ class WsKomponen extends CI_Controller {
         $v['kdSub']=$kdSub;
         $v['tahapan']=$tahapan;
         $v['kdDinas']=$kdDinas;
-        $v['tahun']=$this->tahun;
+        $v['tahun']=$this->tahun; 
+        
+
+        date_default_timezone_set("Asia/Jakarta");
+        $month = date("m");
+        // $month = 11;
+        $dtoday = $this->qexec->_func("select * from ubjudul where bulan='".$month."'");
+        if(count($dtoday)==0){ 
+            $this->qexec->_proc("insert into ubjudul (kdSUb, kdDinas, kdApbd6, kdSDana, nama, taJudul, total, tahapan, dateUpdate, kdJudul, status, qdel, bulan, pagu)
+                (SELECT kdSUb, kdDinas, kdApbd6, kdSDana, nama, taJudul, total, tahapan, dateUpdate, kdJudul, status, qdel, ".$month.", pagu FROM ubjudul where bulan='".($month-1)."' )
+            ");
+        }
+
+        $v['bulan']=$month; 
+        $this->_['bulan']=$this->mbgs->_getBulan($month); 
+        // return print_r(_judulRBelanja($v));
         $this->_['dtDetailRincian']=$this->qexec->_func(_judulRBelanja($v));
         // return print_r($this->_['dtDetailRincian']);
-        foreach ($this->_['dtDetailRincian'] as $key => $v1) {
-            $v['kdJudul']=$v1['kdJudul'];
-			// return print_r(_detailRBelanja($v));
-            $this->_['dtDetailRincian'][$key]['detail']=$this->qexec->_func(_detailRBelanja($v));
-        }
+        // foreach ($this->_['dtDetailRincian'] as $key => $v1) {
+        //     $v['kdJudul']=$v1['kdJudul'];
+		// 	// return print_r(_detailRBelanja($v));
+        //     $this->_['dtDetailRincian'][$key]['detail']=$this->qexec->_func(_detailRBelanja($v));
+        // }
         
         
         return print_r(json_encode($this->_));
@@ -592,6 +636,90 @@ class WsKomponen extends CI_Controller {
         return print_r(json_encode($this->_));
     }
     
+    function lapoSerapan($page){
+        
+        $this->_=array_merge(
+            $this->_,
+            [
+                "pgStart"=>"Login",
+                "pgEnd"=>"Dashboard",
+                "user"=>$this->nmMember,
+                "kdJab"=>$this->kdJabatan,
+                "idBody"=>"bodyTM",
+                "ind"=>2,
+                "index"=>0
+            ]
+        );
+        $this->_=array_merge(
+            $this->_
+            ,
+            _startTm($this->_)
+        );
+        $this->_['head'].=$this->mbgs->_getCss().$this->mbgs->_getJsMaster($page);
+        $this->_['footer'].=$this->mbgs->_getJsChart();
+        $this->_['footer'] .=$this->mbgs->_getJsTabel();
+        
+
+        $this->_['dinas']=$this->qexec->_func(_cbDinas(" where kdDinas='".$this->kdDinas."'"));
+        $qbidang = " and kdDBidang='".$this->kdBidang."'";
+        $wherebidang = " and a.kdBidang='".$this->kdBidang."'";
+        if($this->kdJabatan==2){
+            $gadmin=$this->qexec->_func(_cbDinasForAG($this->kdMember1,""));
+            if(count($gadmin)>0){
+                // $this->_['dinas']=$gadmin;
+                
+            }
+            $this->_['dinas']=$this->qexec->_func(_cbDinas(""));
+            $qbidang = "";
+            $wherebidang = "";
+        }elseif($this->kdJabatan==3){
+            $qbidang = "";
+            $wherebidang = "";
+            $this->_['dinas']=$this->qexec->_func(_cbDinas(""));
+        }
+
+        if($qbidang == ""){ 
+            $this->_['bidang']=array_merge(
+                array([
+                    "value"=>"all",
+                    "valueName"=>"all Bidang"
+                ]),
+                $this->qexec->_func(_cbBidangDinas(" where taDBidang='".$this->tahun."' and kdDinas='".$this->kdDinas."' ".$qbidang." "))
+            );
+        }else{  
+            $this->_['bidang']=$this->qexec->_func(_cbBidangDinas(" where taDBidang='".$this->tahun."' and kdDinas='".$this->kdDinas."' ".$qbidang." "));
+        }
+        
+        date_default_timezone_set("Asia/Jakarta");
+        $month = date("m");
+        $this->_['month']= $month;
+        $this->_['bulan']=$this->mbgs->_getBulan($month); 
+    
+        $this->_['tahun']=$this->tahun;  
+        // return print_r(_renstraOpdBidang($this->_['dinas'][0]['value'],$this->tahun,$wherebidang));
+        $this->_['dinas'][0]['data']=$this->qexec->_func(_renstraOpdBidang($this->_['dinas'][0]['value'],$this->tahun,$wherebidang,$month));
+
+        // return print_r($this->_['dinas']);
+        // $this->_['dinas']=$this->qexec->_func(_rekapBelanjaAllOpd($this->tahun," and a.kdDinas='".$this->kdDinas."'"));
+        // if($this->kdJabatan==2){
+        //     $gadmin=$this->qexec->_func(_rekapBelanjaAllOpdAG($this->tahun,$this->kdMember1,""));
+        //     if(count($gadmin)>0){
+        //         $this->_['dinas']=$gadmin;
+        //     }
+        // }elseif($this->kdJabatan==3){
+        //     $this->_['dinas']=$this->qexec->_func(_rekapBelanjaAllOpd($this->tahun,""));
+        // }
+
+        // return print_r($this->_['dinas']);
+        // $this->_['dinas'][0]['tsub']=$this->qexec->_func(_tsub($this->_['dinas'][0]['kdDinas'],$this->tahun,""))[0]['total'];
+        // $this->_['dinas'][0]['tsubProses']=count($this->qexec->_func(_tsubProses($this->_['dinas'][0]['kdDinas'],$this->tahun,"")));
+
+        // $this->_['dinas'][0]['tpaguPra']=$this->qexec->_func(_tpagu($this->_['dinas'][0]['kdDinas'],"1",$this->tahun,""))[0]['total'];
+        // $this->_['dinas'][0]['tpaguRka']=$this->qexec->_func(_tpagu($this->_['dinas'][0]['kdDinas'],"2",$this->tahun,""))[0]['total'];
+        // $this->_['dinas'][0]['tpaguFinal']=$this->qexec->_func(_tpagu($this->_['dinas'][0]['kdDinas'],"3",$this->tahun,""))[0]['total'];
+
+        return print_r(json_encode($this->_));
+    }
     function lapoOpd($page){
         
         $this->_=array_merge(
