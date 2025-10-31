@@ -20,10 +20,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 #-------------------------
 /nbproject/
 .idea/*
-dataKu
-master
-monev
-musrenbang
+/vendorok
 
 
 ## Sublime Text cache files
