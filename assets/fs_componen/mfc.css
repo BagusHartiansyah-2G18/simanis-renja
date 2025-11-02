@@ -952,3 +952,12 @@ p.desc {
         .form-radio-flex input + label {
           width: 90px;
           height: 61px; } }
+
+
+.hide-important {
+  display: none !important;
+}
+
+.minWidth-300{
+  min-width: 300px !important;
+}

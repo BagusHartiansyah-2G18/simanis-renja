@@ -391,7 +391,7 @@
                     <!-- settings start -->
                     <li id="header_notification_bar" class="dropdown">
                         '.$fdata.'
-                        <ul class="dropdown-menu extended notification">
+                        <ul class="dropdown-menu extended notification" style="min-width:300px !important">
                             '.$fdata1.'
                         </ul>
                     </li>

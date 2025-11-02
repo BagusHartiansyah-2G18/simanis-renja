@@ -861,19 +861,15 @@ function _inpDropdonwSelectedJJin(params){
             <input type="text"
                 class="form-control fzMfc"
                 id="${idInp}"
-                placeholder="Cari satuan..."
-                onfocus="_showForDropSelect('${idMenu}')"
+                placeholder="Cari satuan..." 
                 oninput="_formSearch${idMenu}(this,'${idOpsMenu}')"
                 style="background-color:#283941; color:white;" />
 
-            <div class="dropdown-menu" id="${idMenu}" style="width: 100%; margin: 0px; display: none;">
+            <div class="dropdown-menu hide-important" id="${idMenu}" style="width: 100%; margin: 0px; display: block;">
             <div style="overflow:auto; max-height:200px" id="${idOpsMenu}"> 
                 ${ops}
             </div>
             </div>
         </div> 
     `;
-}
-function _showForDropSelect(id) {
-    document.getElementById(id).style.display = "block";
-}
+} 

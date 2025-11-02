@@ -973,13 +973,24 @@ class Proses extends CI_Controller {
         date_default_timezone_set("Asia/Jakarta");
         $month = date("m");
 
-        $check=$this->qexec->_proc("update ubjudul set total='".$jumlah."' where 
+        $check=$this->qexec->_multiproc("
+                update ubjudul set total='".$jumlah."', dateUpdate='".date("d,m,Y")."' where 
                 kdSub='".$kdSub."'
                 and kdDinas='".$kdDinas."'
                 and tahapan='".$tahapan."'
                 and kdJudul='".$kdJudul."'
                 and taJudul='".$tahun."' 
-                and bulan='".$month."'
+                and bulan='".$month."';
+                INSERT INTO `notejudul`(`kdSUb`, `kdDinas`, `kdApbd6`, `taJudul`, `total`, `tahapan`, `dateUpdate`, `kdJudul`, `bulan`, `pagu`) (
+                    select `kdSUb`, `kdDinas`, `kdApbd6`, `taJudul`, '".$jumlah."', `tahapan`, '".date("d,m,Y")."', `kdJudul`, `bulan`, `pagu` from ubjudul
+                    where kdSub='".$kdSub."'
+                        and kdDinas='".$kdDinas."'
+                        and tahapan='".$tahapan."'
+                        and kdJudul='".$kdJudul."'
+                        and taJudul='".$tahun."' 
+                        and bulan='".$month."'
+                    limit 1
+                )
         ");
         if($check){
             return $this->mbgs->resTrue($this->_);
@@ -1276,6 +1287,23 @@ class Proses extends CI_Controller {
                     kdFitur like '%".explode("/",$kodePage)[0]."%';";
         }
         return $q;
+    }
+    function delSop(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }
+        
+        $baseEND=json_decode((base64_decode($_POST['data'])));
+    
+        // return print_r($baseEND);
+        $id       =$baseEND->{'id'};  
+        if($this->Msop->del($id)){
+            $this->_['id']=$id;
+            return $this->mbgs->resTrue($this->_);
+        }else{
+            return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
+        } 
+        
     }
     function addSop(){
         if($this->sess->kdMember==null){

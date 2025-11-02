@@ -19,5 +19,16 @@ class Msop extends CI_Model {
         }
         return $this->db->get()->result();
     }
+    public function cbKategori() {
+        $this->db->select('kategori as value, kategori AS valueName');
+        $this->db->from('sop');
+        $this->db->group_by('kategori');
+
+        return $this->db->get()->result();
+    }
+    public function del($id) {
+        return $this->db->delete('sop', array('id' => $id));
+    }
+
 
 }

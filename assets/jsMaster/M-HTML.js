@@ -455,7 +455,7 @@ function _tabel(v){
             kond=true;
             f1data=v2.split("$");
             if(f1data.length==2){
-                fdata+=`<td>`+_$(v1[f1data[0]])+`</td>`;
+                fdata+=`<td style="text-align:right">`+_$(v1[f1data[0]])+`</td>`;
                 kond=false;
             }
             if(v2=="checkbox" && kond){

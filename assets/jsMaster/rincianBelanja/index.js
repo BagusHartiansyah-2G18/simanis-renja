@@ -14,7 +14,7 @@ function _onload(data){
     _.act=Number(data.act);
 
     _.kdBidang = data.kdBidang
-
+    _.today = data.today;
 
     _.tahapan=data.tahapan;
     _.tahun=data.tahun;
@@ -1169,7 +1169,7 @@ function _previewRBelanja(){
         //     `;
         //     kdSDana=_.dtDetailRincian[a].kdSDana;
         // }       
-        if(judul!=_.dtDetailRincian[a].nama){
+        if(judul!=_.dtDetailRincian[a].nama){ 
             html+=`
                 <tr style="background-color: lightblue;">
                     <td class="pl-1"></td>
@@ -1179,10 +1179,10 @@ function _previewRBelanja(){
                     <td class="text-right pr-1">`+_$(_.dtDetailRincian[a].pagu)+`</td>
                     <td class="text-right pr-1">`+_$(_.dtDetailRincian[a].jumlah)+`</td>
                     <td class="text-right">`;
-                    if(!_.act){
+                    if(!_.act && _.today!=_.dtDetailRincian[a].dateUpdate && _.dtDetailRincian[a].pagu != _.dtDetailRincian[a].jumlah){
                         // if(_.dtDetailRincian[0].keyForPraRka=="0"){
                         
-                        html+=`<button title="Tandai, dicairkan" class="btn btn-success btn-sm" onclick="_goUPBelanja(${a})"><i class="fa fa-check-square"></i></button>`;
+                        html+=`<button title="perbarui nominal realisasi" class="btn btn-success btn-sm" onclick="_goUPBelanja(${a})"><i class="fa fa-check-square"></i></button>`;
                         // html+=`
                         // <div style="margin:auto">
                         //     <button title="Edit Rincian Rekening" class="btn btn-warning btn-sm" onclick="_setEditViewTabel(`+a+`)"><i class="mdi mdi-grease-pencil"></i></button>
@@ -1444,7 +1444,9 @@ function _goUPBelanjaed() {
     
     if(_isNull(param.jumlah))return _toast({bg:'e',msg:'Tambahkan Nominal Realisasi Belanja !!!'}); 
 
-    if(param.jumlah>_.dtDetailRincian[_.Ijudul].pagu)return _toast({bg:'e',msg:'nominal melebihi maksimal Realisasi !!!'}); 
+    console.log(param.jumlah,_.dtDetailRincian[_.Ijudul].pagu);
+    
+    if(Number(param.jumlah)>Number(_.dtDetailRincian[_.Ijudul].pagu))return _toast({bg:'e',msg:'nominal melebihi maksimal Realisasi !!!'}); 
 
     _post('proses/updRealisasiBelanja',param).then(res=>{
         res=JSON.parse(res);

@@ -7,6 +7,7 @@ function _onload(data){
     _.data = data.data;
     _.month = data.month;
     _.bulan = data.bulan;
+    _.triulan = data.triulan;
     
     
     _.tahun.forEach((v) => {
@@ -17,8 +18,7 @@ function _onload(data){
     $('#bodyTM').html(_formData());
     $('#footer').html(data.tmFooter+data.footer);
     
-    // _startTabel("dt");
-     
+    // _startTabel("dt"); 
 }
 function _form() {
     // <img class="img-fluid d-block mx-auto" src="`+assert+`fs_css/bgForm.png" alt="sasasa"></img>
@@ -64,9 +64,9 @@ function _formData() {
                     `,
                     kolom:[
                         {
-                            size:"6 h-100",form:organisasi(),style:"padding: 20px;background:none;"
+                            size:"7 h-100",form:organisasi(),style:"padding: 20px;background:none;"
                         },{
-                            size:"6 h-100",form:info(),style:"padding:45px  20px;background:none; text-align"
+                            size:"5 h-100",form:info(),style:"padding:45px  20px;background:none; text-align"
                         }
                     ]
                 }) 
@@ -117,7 +117,7 @@ function newYear() {
                         <img src="`+assert+`/fs_css/bpt.jpg" style="border-radius: 0px; height:250px; width:250px;">
                     </div>
                     <h2>Bupati - Wakil Bupati</h2>
-                    <h4 class="p-0 m-0">H. Amar Nurmansyah, ST., M.Si. <br/> Hj. Hanipah, S.Pt., M.M.Inov</h4>
+                    <h4 class="p-0 m-0 text-danger">H. Amar Nurmansyah, ST., M.Si. <br/> Hj. Hanipah, S.Pt., M.M.Inov</h4>
                 </div>
             </div>
             <div class="col-md-8">
@@ -206,7 +206,8 @@ function organisasi() {
 }
 function info() {
     const { jumlahSubKegiatan,persentaseRealisasi,totalAnggaran,totalRealisasi,tahun } = __valuesInformasiSKPD();
-    const infoBidang = __valueInformasiBidang();
+    const infoBidang = __valueInformasiBidang(); 
+    localStorage.setItem("triulan",JSON.stringify(infoBidang)); 
     return `
         <div class="detailed">
                         <h4>Informasi Sistem</h4>
@@ -305,11 +306,9 @@ function __valueInformasiBidang(){
   
   return resp;
 }
-function __persentaseRealisasi(fdt) {
-    const totalfdt = fdt.reduce((sum, v) => sum + Number(v.persen), 0); 
-    const persen= ((totalfdt / (fdt.length * 100)) * 100).toFixed(2);
-
+function __persentaseRealisasi(fdt) { 
     const pagu = fdt.reduce((sum, v) => sum + Number(v.total), 0); 
     const realisasi = fdt.reduce((sum, v) => sum + Number(v.realisasi), 0); 
-    return {persen,pagu,realisasi,sub:fdt.length}
+    const triulan = fdt.filter(v=>v.persen< (25*_.triulan)); 
+    return {persen:((realisasi/pagu)*100).toFixed(2),pagu,realisasi,sub:fdt.length,triulan:triulan}
 }

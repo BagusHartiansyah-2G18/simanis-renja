@@ -281,8 +281,8 @@ class WsKomponen extends CI_Controller {
         date_default_timezone_set("Asia/Jakarta");
         $month = date("m");
         $this->_['month']= $month;
-        $this->_['bulan']=$this->mbgs->_getBulan($month);  
-        
+        $this->_['bulan']=$this->mbgs->_getBulan($month);   
+        $this->_['triulan'] =floor(date("m") / 3);  
         $this->_['data']=$this->qexec->_func(_renstraOpdBidangAutoTahun($this->kdDinas,$month));
 
         // $this->_['dinas']=$this->qexec->_func(_cbDinas(" where kdDinas='".$this->kdDinas."'"));
@@ -328,7 +328,7 @@ class WsKomponen extends CI_Controller {
 
         $this->_['bidang']=$this->qexec->_func(_cbBidangDinas(" where taDBidang='".$this->tahun."' and kdDinas='".$this->kdDinas."' ".$qbidang." "));
         
-        // // return print_r(_renstraOpdGet($this->_['dinas'][0]['value'],$this->tahun,""));
+        
         $this->_['dinas'][0]['data']=$this->qexec->_func(_renstraOpdBidangGet($this->_['dinas'][0]['value'],"",$this->tahun,""));
 
         // $this->_['dinas'][0]['tsub']=$this->qexec->_func(_tsub($this->_['dinas'][0]['value'],$this->tahun,""))[0]['total'];
@@ -435,8 +435,8 @@ class WsKomponen extends CI_Controller {
         $this->_['footer'] .=$this->mbgs->_getJsTabel();
 
         
-        $this->_['bidang']=$this->qexec->_func(_cbBidangDinas(" where taDBidang='".$this->tahun."' and kdDinas='".$this->kdDinas."'"));
-        $this->_['kategori']=$this->Mkategori->cb();
+        
+        $this->_['kategori']=$this->Msop->cbKategori();
 
         $this->_['isAdm']  = false;
         $kdBidang =$this->kdBidang;
@@ -444,7 +444,11 @@ class WsKomponen extends CI_Controller {
             $kdBidang ="";
             $this->_['isAdm']  = true;
         }
-        
+        $where = " where taDBidang='".$this->tahun."' and kdDinas='".$this->kdDinas."'"; 
+        if ($kdBidang != "") {
+            $where .= " and kdDBidang='".$kdBidang."'";
+        } 
+        $this->_['bidang']=$this->qexec->_func(_cbBidangDinas($where));
         $this->_['sop']=$this->Msop->all($kdBidang);
         
         // $this->_['dinas'][0]['tpaguPra']=$this->qexec->_func(_tpagu($this->_['dinas'][0]['value'],"1",$this->tahun,""))[0]['total'];
@@ -539,6 +543,7 @@ class WsKomponen extends CI_Controller {
         $this->_['bulan']=$this->mbgs->_getBulan($month); 
         // return print_r(_judulRBelanja($v));
         $this->_['dtDetailRincian']=$this->qexec->_func(_judulRBelanja($v));
+        $this->_['today']=date("d,m,Y");
         // return print_r($this->_['dtDetailRincian']);
         // foreach ($this->_['dtDetailRincian'] as $key => $v1) {
         //     $v['kdJudul']=$v1['kdJudul'];

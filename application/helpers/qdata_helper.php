@@ -279,7 +279,7 @@
         // ,b.keyForPraRka,b.keyForRKA,b.keyForRkaFinal
         return '
             SELECT 
-                a.nama,a.total as jumlah,a.pagu,a.dateUpdate,a.kdJudul,a.kdSDana,a.qdel
+                a.nama,a.total as jumlah,a.pagu,a.dateUpdate,a.kdJudul,a.kdSDana,a.qdel,a.dateUpdate
                 ,b.kdSub	,b.nmSub,0 as keyForPraRka,0 as keyForRKA,0 as keyForRkaFinal
                 ,c.kdKeg	,c.nmKeg
                 ,d.kdProg	,d.nmProg

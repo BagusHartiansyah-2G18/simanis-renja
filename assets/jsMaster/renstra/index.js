@@ -34,12 +34,14 @@ function _onload(data){
             persentse:0
         });
     }
+    localStorage.setItem("triulan",JSON.stringify(__valueInformasiBidang())); 
+    
 
     // const fdt =  _.dinas[_.ind].data.filter(v => Number(v.prealisasi) > 1);
     // const totalfdt = fdt.reduce((sum, v) => sum + Number(v.prealisasi), 0); 
     // const persentase = ((totalfdt / (_.dinas[_.ind].data.length * 100)) * 100).toFixed(2);
     // console.log(persentase + "%");
-
+ 
     
 
     
@@ -49,10 +51,66 @@ function _onload(data){
     
     _startTabel("dt");
 }
-function __persentaseRealisasi(dt) {
-    const fdt =  dt.filter(v => Number(v.prealisasi) > 1);
-    const totalfdt = fdt.reduce((sum, v) => sum + Number(v.prealisasi), 0); 
-    return ((totalfdt / (dt.length * 100)) * 100).toFixed(2);
+// function __persentaseRealisasi(dt) {
+//     const fdt =  dt.filter(v => Number(v.totalR) > 1);
+//     const totalfdt = fdt.reduce((sum, v) => sum + Number(((v.totalR/v.totalPRARKA)*100).toFixed(2)), 0); 
+    
+//     return ((totalfdt / (fdt.length * 100)) * 100).toFixed(2);
+// }
+function __valueInformasiBidang(){  
+    
+  let resp = [];
+  _.bidang.forEach(v=>{ 
+    const bidang = _.dinas[0].data.filter(x=>Number(x.kdBidang) == Number(v.value)).map(x=>({
+        total:x.totalPRARKA,
+        realisasi:x.totalR,
+        persen:(Number(x.totalPRARKA)==0?0:((Number(x.totalR)/Number(x.totalPRARKA))*100).toFixed(2)),
+    }));
+    if(bidang.length>0){  
+        resp.push({
+            nmBidang:v.valueName,
+            kdBidang:v.value,
+            ...__persentaseRealisasi(bidang)
+        })
+    }
+  }); 
+  
+  return resp;
+}
+// function __persentaseRealisasi(dt) {
+//     // Filter data dengan totalR > 1
+//     // const tota; = dt.filter(v => Number(v.totalR) > 1);
+
+//     const totalR = dt.reduce((sum, v) => {
+//         const realisasi = Number(v.realisasi); 
+//         const persentase = realisasi > 0 ? realisasi : 0;
+//         return sum + Number(persentase.toFixed(2));
+//     }, 0);
+
+//     const totalPagu = dt.reduce((sum, v) => { 
+//         const persentase = Number(v.total) > 0 ? Number(v.total) : 0;
+//         return sum + Number(persentase.toFixed(2));
+//     }, 0);
+
+//     // // Hitung total persentase realisasi dari data yang lolos filter
+//     // const totalPersentase = fdt.reduce((sum, v) => {
+//     //     const realisasi = Number(v.totalR);
+//     //     const target = Number(v.totalPRARKA);
+//     //     const persentase = target > 0 ? (realisasi / target) * 100 : 0;
+//     //     return sum + Number(persentase.toFixed(2));
+//     // }, 0);
+
+//     // Hitung rata-rata persentase
+//     // const rataRata = fdt.length > 0 ? (totalPersentase / fdt.length).toFixed(2) : "0.00";
+//     // console.log(totalR , totalPagu);
+    
+//     return ((totalR / totalPagu) * 100).toFixed(2) ;
+// }
+function __persentaseRealisasi(fdt) { 
+    const pagu = fdt.reduce((sum, v) => sum + Number(v.total), 0); 
+    const realisasi = fdt.reduce((sum, v) => sum + Number(v.realisasi), 0); 
+    // const triulan = fdt.filter(v=>v.persen< (25*_.triulan)); 
+    return {persen:((realisasi/pagu)*100).toFixed(2),pagu,realisasi,sub:fdt.length,triulan:fdt}
 }
 function _form() {
     // <img class="img-fluid d-block mx-auto" src="`+assert+`fs_css/bgForm.png" alt="sasasa"></img>'
@@ -115,6 +173,7 @@ function _formData() {
 }
 function setTabel(){
     _.totalPagu = 0;
+    _.totalRealisasi=0;
     html=`
       <thead style="font-size: small;">
         <tr>            
@@ -137,12 +196,13 @@ function setTabel(){
       <tbody style="font-size: small;">`;
         _.dinas[_.ind].data.forEach((v,i) => {
             _.totalPagu += Number(v.totalPRARKA);
+            _.totalRealisasi += Number(v.totalR);
             fkondisi=false;
             if(_.kdBidang == v.kdBidang || _.kdBidang=="all"){
                 fkondisi=true;
             }
             // ftext=(Number(v.totalPRARKA)>1?_$(v.totalPRARKA):"buka");
-            ftext=(Number(v.prealisasi)>1?_$(v.totalPRARKA)+` <b class="text-dark">/ ${v.prealisasi}%</b>`:_$(v.totalPRARKA));
+            ftext=(Number(v.totalR)>1?_$(v.totalPRARKA)+` <b class="text-dark">/ ${((v.totalR/v.totalPRARKA)*100).toFixed(2)}%</b>`:_$(v.totalPRARKA));
             fbtnPra=[];
             fbtnPra.push({ 
                 clsBtn:`btn-primary shadow btn-block fzMfc`

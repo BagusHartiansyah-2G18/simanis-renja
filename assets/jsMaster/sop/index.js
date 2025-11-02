@@ -12,52 +12,10 @@ function _onload(data){
     _.kategoriAktif =0;
     // $('#bodyTM').html(`<div class="p-2"><div id="pdf-container"></div></div>`);
     $('#footer').html(`<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.min.js"></script>`+data.tmFooter+data.footer);
-    
     $(document).ready(function() { 
         $('#bodyTM').html(tabPanel()); 
     })
-    
-    
-    // _startTabel("dt");
-    // $(document).ready(function() { 
-    //     $('#pdf-container').css({
-    //     'display': 'flex',
-    //     'flex-direction': 'column',
-    //     'gap': '20px'
-    //     });
-
-    //     // Set style untuk semua canvas di dalam #pdf-container
-    //     $('#pdf-container canvas').css({
-    //     'border': '1px solid #ccc',
-    //     'box-shadow': '0 2px 6px rgba(0,0,0,0.1)'
-    //     });
-
-    //     const url = 'fs_sistem/upload/files/Layla & Majnun-2022-02-22-09-03-51pm.pdf';  
-    //     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.worker.min.js';
-    //     const loadingTask = pdfjsLib.getDocument(assert+url);
-    //     const container = document.getElementById('pdf-container');
-
-
-    //     pdfjsLib.getDocument(assert+url).promise.then(pdf => {
-    //     for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-    //         pdf.getPage(pageNum).then(page => {
-    //         const scale = 1.2;
-    //         const viewport = page.getViewport({ scale });
-    //         const canvas = document.createElement('canvas');
-    //         const context = canvas.getContext('2d');
-    //         canvas.height = viewport.height;
-    //         canvas.width = viewport.width;
-    //         container.appendChild(canvas);
-    //         page.render({ canvasContext: context, viewport });
-    //         });
-    //     }
-    //     });
-    // });
-
-    
-
-    
-}
+}    
 
 function tabPanel(){
     infoSupport1=[];
@@ -74,15 +32,15 @@ function tabPanel(){
                 <section class="panel">
                     <div class="panel-body"> 
                         <ul class="nav nav-pills nav-stacked mail-nav" role="tablist" style="flex-direction: column;">
-                            ${_.isAdm && `
+                            ${_.isAdm ? `
                                 <li class="active"><a href="#table" data-toggle="tab"><i class="fa fa-inbox"></i>Data SOP</a></li>    
                                 <li class=""><a href="#form" data-toggle="tab"><i class="fa fa-inbox"></i>Form Entri</a></li>
-                            `}
+                            `:''}
                             ${_.kategori.map(v=>`
                                 <li class="${!_.isAdm && 'active'}">
-                                    <a href="#kate${v.value}" data-toggle="tab" onclick="setPDF(${v.value},'${v.valueName}')"><i class="fa fa-inbox"></i> ${v.valueName} </a>
+                                    <a href="#kate${v.value}" data-toggle="tab" onclick="setPDF('${v.value}','${v.valueName}')"><i class="fa fa-inbox"></i> ${v.valueName} </a>
                                 </li>    
-                            `)}
+                            `).join(" ")}
                         </ul>
                     </div>
                 </section>
@@ -90,7 +48,7 @@ function tabPanel(){
 
             <div class="col-sm-9">
                 <div class="tab-content"> 
-                    ${_.isAdm && `
+                    ${_.isAdm ? `
                         <div class="tab-pane active" id="table"> 
                             <div class="form-panel">
                                 ${
@@ -121,9 +79,9 @@ function tabPanel(){
                                 ${formEntri()} 
                             </div>
                         </div> 
-                    `} 
-                    ${_.kategori.map(v=>`
-                        <div class="tab-pane" id="kate${v.value}">
+                    `:''} 
+                    ${_.kategori.map((v,i)=>`
+                        <div class="tab-pane ${!_.isAdm && i==0 ? 'active':''}" id="kate${v.value}">
                             <div class="form-panel">
                                 ${
                                     _formIcon({
@@ -148,7 +106,7 @@ function tabPanel(){
                                                 // index:true
                                             })
                                             +`<br/>`
-                                            +`<div class="p-2"><div id="pdf-container${v.value}"></div></div>`
+                                            +`<div class="p-2"><div id="pdf-container${v.value}">${_.sop.length == 0?'data belum tersedia':'memuat...'}</div></div>`
                                     })
                                 }  
                             </div>  
@@ -233,17 +191,17 @@ function goForm(){
 function setTabel(){
     infoSupport1=[];
     infoSupport1.push({ 
-        clsBtn:`btn-outline-primary fzMfc`
-        ,func:"lapoOpdPDF()"
-        ,icon:`<i class="mdi mdi-file-check"></i>pdf`
-        ,title:"Lihat laporan"
+        clsBtn:`btn-outline-danger fzMfc`
+        ,func:"_konfirDelSOP()"
+        ,icon:`<i class="fa fa-trash"></i> Hapus`
+        ,title:"Hapus data"
     });
-    infoSupport1.push({ 
-        clsBtn:`btn-outline-success fzMfc`
-        ,func:"lapoOpdExcel()"
-        ,icon:`<i class="mdi mdi-file-check"></i>excell`
-        ,title:"Lihat laporan"
-    });
+    // infoSupport1.push({ 
+    //     clsBtn:`btn-outline-success fzMfc`
+    //     ,func:"lapoOpdExcel()"
+    //     ,icon:`<i class="mdi mdi-file-check"></i>excell`
+    //     ,title:"Lihat laporan"
+    // });
     return _tabelResponsive(
         {
             id:"dt"
@@ -257,7 +215,7 @@ function setTabel(){
                     ,namaKolom:[
                         "Kategori","Judul"
                     ],
-                    // action:infoSupport1
+                    action:infoSupport1
                 })
         });
 }
@@ -356,11 +314,13 @@ function _formSearchsatuan(input,idOpsMenu) {
     _.idOpsMenu = idOpsMenu; 
     const keyword = input.value.toLowerCase(); 
     const container = document.getElementById(idOpsMenu);
-    container.innerHTML = "";
-
-    let found = false;
+    container.innerHTML = ""; 
+    let found = false;  
+    
+    $("#satuan").removeClass("hide-important");
     let html = generateOpsKategori(_.kategori.filter(v=>v.valueName.toLowerCase().includes(keyword)))
-
+ 
+    console.log(html);
     
 
     if (!found && keyword.trim() !== "") {
@@ -373,7 +333,7 @@ function _formSearchsatuan(input,idOpsMenu) {
         html+= _btn({
             color:"warning shadow",
             judul: `Tambah "${keyword}"`,
-            attr:`style='float:right; padding:5px;font-size: medium;' onclick="optKategori('${keyword}')"`,
+            attr:`style='float:right; padding:5px;font-size: medium;' onclick="_tambahKategori('${keyword}')"`,
             // class:"btn btn-secondary"
         })
         // container.appendChild(addBtn);
@@ -383,27 +343,30 @@ function _formSearchsatuan(input,idOpsMenu) {
     container.innerHTML =html;
 }
 function optKategori(kategori){
-    _.idKategori =kategori;
-    console.log(kategori);
-    
-    document.getElementById("idInpDropJin") .value = kategori;
-    document.getElementById("dsatuan").style.display = "none";
+    _.idKategori =kategori; 
+
+    document.getElementById("idInpDropJin") .value = kategori; 
+    $("#satuan").addClass("hide-important");
+
 }
 function _tambahKategori(keyword, input) { 
-    param={
-        judul:keyword,
-    }
-    _post('proses/addKategori',param).then(res=>{
-        res=JSON.parse(res);
-        if(res.exec){
-            _.idKategori = keyword;
-            _.kategori.push({value:res.data.id, valueName:keyword});
-            input.value = keyword;  
-            document.getElementById("satuan").style.display = "none";
-        }else{
-            return _toast({bg:'e', msg:res.msg});
-        }
-    }); 
+    _.idKategori = keyword;
+    $("#satuan").addClass("hide-important");
+
+    // param={
+    //     judul:keyword,
+    // }
+    // _post('proses/addKategori',param).then(res=>{
+    //     res=JSON.parse(res);
+    //     if(res.exec){
+    //         _.idKategori = keyword;
+    //         _.kategori.push({value:res.data.id, valueName:keyword});
+    //         input.value = keyword;  
+    //         document.getElementById("satuan").style.display = "none";
+    //     }else{
+    //         return _toast({bg:'e', msg:res.msg});
+    //     }
+    // }); 
 } 
 
 function _konfirAddSOP() {
@@ -442,10 +405,59 @@ function _konfirAddSOPed() {
     _postFile("proses/addSop",param,_file.data).then(res=>{
         res=JSON.parse(res);
         if(res.exec){
-            _.sop.push(res.data);
+            // _.sop.push(res.data.data);
+            // _.kategori.push({value:_.idKategori, valueName:_.idKategori});
             _modalHide('modal'); 
+            // _generateTabel();
             $('a[href="#table"]').tab('show');
-        //    _reload();
+           _reload();
+        }else{
+            return _toast({bg:'e', msg:res.msg});
+        }
+    }) 
+}
+function _generateTabel() {
+    
+    $('#bodyTM').html(tabPanel()); 
+    $('#tabelShow').html(setTabel());
+    _startTabel("dt",{});
+    
+}
+function _konfirDelSOP(i) {
+    _modalEx1({
+        judul:"Konfirmasi".toUpperCase(),
+        icon:`<i class="fa fa-trash"></i>`,
+        cform:`text-light`,
+        bg:"danger",
+        minWidth:fsize+"; font-size: medium;",
+        isi:"ingin Menghapus data ini ?",
+        footer:_btn({
+                    color:"primary shadow",
+                    judul:"Close",
+                    attr:`style='float:right; padding:5px;font-size: medium;' onclick="_modalHide('modal')"`,
+                    class:"btn btn-secondary"
+                })
+                +_btn({
+                    // color:"success shadow",
+                    judul:"Hapus",
+                    attr:"style='float:right; padding:5px;font-size: medium;' onclick='_konfirDelSOPed("+i+")'",
+                    class:"btn btn-danger"
+                })
+    }); 
+}
+function _konfirDelSOPed(i) {
+    param={ 
+        id:_.sop[i].id
+    } 
+    
+    _post("proses/delSop",param,_file.data).then(res=>{
+        res=JSON.parse(res);
+        if(res.exec){
+            // _.sop.push(res.data.data);
+            // _.kategori.push({value:_.idKategori, valueName:_.idKategori});
+            _modalHide('modal');  
+            $('a[href="#table"]').tab('show');
+           _reload();
         }else{
             return _toast({bg:'e', msg:res.msg});
         }
