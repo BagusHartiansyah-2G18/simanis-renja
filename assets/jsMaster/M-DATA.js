@@ -137,7 +137,7 @@ function informasix() {
 }
 
 function newInfo(persen) {  
-    const all = ((_.totalPagu/_.totalRealisasi)*100).toFixed(2);
+    const all = ((_.totalRealisasi/_.totalPagu)*100).toFixed(2);
     const allSisa = 100-all;
     let fhtml ='';
     fhtml=`
