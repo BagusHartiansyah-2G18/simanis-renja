@@ -51,12 +51,12 @@ function _onload(data){
     
     _startTabel("dt");
 }
-// function __persentaseRealisasi(dt) {
-//     const fdt =  dt.filter(v => Number(v.totalR) > 1);
-//     const totalfdt = fdt.reduce((sum, v) => sum + Number(((v.totalR/v.totalPRARKA)*100).toFixed(2)), 0); 
+function __persentaseRealisasi(dt) {
+    const fdt =  dt.filter(v => Number(v.totalR) > 1);
+    const totalfdt = fdt.reduce((sum, v) => sum + Number(((v.totalR/v.totalPRARKA)*100).toFixed(2)), 0); 
     
-//     return ((totalfdt / (fdt.length * 100)) * 100).toFixed(2);
-// }
+    return ((totalfdt / (fdt.length * 100)) * 100).toFixed(2);
+}
 function __valueInformasiBidang(){  
     
   let resp = [];
@@ -70,7 +70,7 @@ function __valueInformasiBidang(){
         resp.push({
             nmBidang:v.valueName,
             kdBidang:v.value,
-            ...__persentaseRealisasi(bidang)
+            ...__persentaseRealisasiBidang(bidang)
         })
     }
   }); 
@@ -106,7 +106,7 @@ function __valueInformasiBidang(){
     
 //     return ((totalR / totalPagu) * 100).toFixed(2) ;
 // }
-function __persentaseRealisasi(fdt) { 
+function __persentaseRealisasiBidang(fdt) { 
     const pagu = fdt.reduce((sum, v) => sum + Number(v.total), 0); 
     const realisasi = fdt.reduce((sum, v) => sum + Number(v.realisasi), 0); 
     // const triulan = fdt.filter(v=>v.persen< (25*_.triulan)); 
