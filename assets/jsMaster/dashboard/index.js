@@ -175,7 +175,7 @@ function organisasi() {
                 <div class="activity-panel">
                     <div class="row centered mt mb justify-content-center">
                           <div class="col-sm-4">
-                            <img src="${img? img:assert + "fs_css/fr-05.jpg"}" class="img-circle" width="65">
+                            <img src="${img? img:assert + "fs_css/fr-05.jpg"}" class="img-circle" width="65"  style="border-radius: 10px">
                             <h3>${nm}</h3>
                             <h6>${nip}</h6>
                           </div>
