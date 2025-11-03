@@ -187,7 +187,7 @@ function organisasi() {
                     <div class="row centered mt mb">
                       ${bidang.map((v)=>`
                         <div class="col-sm-3">
-                            <img src="${v.img? v.img:assert + "fs_css/fr-05.jpg"}" class="img-circle" width="65">
+                            <img src="${v.img? v.img:assert + "fs_css/fr-05.jpg"}" class="img-circle" width="65" style="border-radius: 10px">
                             <h5>${v.asBidang.toUpperCase()}</h5>
                             <h4>${v.nm}</h4>
                             <h6>${v.nip}</h6>
