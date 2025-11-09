@@ -7,13 +7,19 @@ function _onload(data){
     _.kdBidang = _.bidang[0].value;
     _.sop=data.sop.map((v,i)=>({...v,i})); 
     _.isAdm = data.isAdm;
-    _file.data=[];
-    
+    _file.data=[]; 
     _.kategoriAktif =0;
+    // console.log(_.sop);
+    
     // $('#bodyTM').html(`<div class="p-2"><div id="pdf-container"></div></div>`);
     $('#footer').html(`<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.5.207/pdf.min.js"></script>`+data.tmFooter+data.footer);
     $(document).ready(function() { 
         $('#bodyTM').html(tabPanel()); 
+
+        if(!_.isAdm & _.sop.length>0){
+            
+            setPDF(_.kategori[0].value,_.kategori[0].valueName);
+        }
     })
 }    
 
@@ -86,7 +92,7 @@ function tabPanel(){
                                 ${
                                     _formIcon({
                                         icon:'<i class="mdi mdi-file-check"></i>'
-                                        ,text:"<h3>Preview SOP</h3>",
+                                        ,text:"<h3>SOP "+v.valueName+"</h3>",
                                         classJudul:' p-2',
                                         id:"form1",
                                         sizeCol:undefined,
@@ -98,7 +104,7 @@ function tabPanel(){
                                                 judul:"Pilih Judul",
                                                 id:"kdDinas",
                                                 color:"black",  
-                                                data:_.sop.filter(v1=>v1.valueName == v1.nmKate).map(v1=>({value:v1.file,valueName:v1.judul})),
+                                                data:_.sop.filter(v1 => v1.kategori.toLowerCase().includes(v.value.toLowerCase())).map(v1=>({value:v1.file,valueName:v1.judul})),
                                                 bg:"bg-info text-light",
                                                 method:"sejajar",
                                                 attr:"font-size:15px;",
@@ -106,37 +112,41 @@ function tabPanel(){
                                                 // index:true
                                             })
                                             +`<br/>`
-                                            +`<div class="p-2"><div id="pdf-container${v.value}">${_.sop.length == 0?'data belum tersedia':'memuat...'}</div></div>`
                                     })
                                 }  
                             </div>  
                         </div>     
-                    `)}
+                    `).join(" ")}
                     
                 </div>
+
+                <div class="p-2 form-panel"><div id="pdf-container"></div></div>
             </div> 
         </div> 
         <hr/>
     `;
+    
 }
 
 function setPDF(id, nmKate) {
+    // kate
+    $('a[href="#kate'+id+'"]').tab('show');
     _.kategoriAktif = 0;
     _.idKategoriAktif = id;
-    _.sopAktif = _.sop.filter(v1 => v1.kategori === nmKate);
+    _.sopAktif = _.sop.filter(v1 => v1.kategori.toLowerCase().includes(nmKate.toLowerCase()));
 
     if (_.sopAktif.length === 0) {
         console.warn('File PDF tidak ditemukan untuk kategori:', nmKate);
         return;
-    }
-
+    } 
     setTimeout(() => {
         goPDF( _.sopAktif[0].file);
     }, 500); // 500ms cukup, tidak perlu 5000ms
 }
 
 function goPDF(url) { 
-    const containerId = '#pdf-container' + _.idKategoriAktif;
+    const containerId = '#pdf-container';
+    
     const container = document.querySelector(containerId);
 
     if (!container) {
@@ -196,12 +206,12 @@ function setTabel(){
         ,icon:`<i class="fa fa-trash"></i> Hapus`
         ,title:"Hapus data"
     });
-    // infoSupport1.push({ 
-    //     clsBtn:`btn-outline-success fzMfc`
-    //     ,func:"lapoOpdExcel()"
-    //     ,icon:`<i class="mdi mdi-file-check"></i>excell`
-    //     ,title:"Lihat laporan"
-    // });
+    infoSupport1.push({ 
+        clsBtn:`btn-outline-success fzMfc`
+        ,func:"openFile()"
+        ,icon:`<i class="mdi mdi-file-check"></i>Preview`
+        ,title:"Lihat Dokument"
+    });
     return _tabelResponsive(
         {
             id:"dt"
@@ -210,10 +220,10 @@ function setTabel(){
                     data:_.sop
                     ,no:1
                     ,kolom:[
-                        "kategori","judul"
+                        "kategori","judul","nmBidang",
                     ]
                     ,namaKolom:[
-                        "Kategori","Judul"
+                        "Kategori","Judul","Bidang"
                     ],
                     action:infoSupport1
                 })
@@ -462,4 +472,8 @@ function _konfirDelSOPed(i) {
             return _toast({bg:'e', msg:res.msg});
         }
     }) 
+}
+
+function openFile(i) {
+    window.open(assert+_.sop[i].file,"_blank") ; 
 }
