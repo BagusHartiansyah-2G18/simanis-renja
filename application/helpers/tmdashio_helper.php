@@ -105,7 +105,7 @@
 
         $menuSupport=array();
         array_push($menuSupport,[
-            "nm"=>"Renja",
+            "nm"=>"Serapan Anggaran",
             "ic"=>'<i class="mdi mdi-airballoon-outline menu-icon"></i>',
             "cls"=>'',
             "url"=>$router."control/renstra",
@@ -130,14 +130,14 @@
             "subMenu"=>[
                 [
                     "url"=>$router."control/lapoSerapan",
-                    "menu"=>"Serapan Anggaran",
+                    "menu"=>"BPKAD",
                     "ha"=>$user,
                     "status"=>""
-                // ],[
-                //     "url"=>$router."control/lapoBelanja",
-                //     "menu"=>"Rekap Belanja",
-                //     "ha"=>$admin,
-                //     "status"=>""
+                ],[
+                    "url"=>$router."control/lapoBelanja",
+                    "menu"=>"SKPKD",
+                    "ha"=>$admin,
+                    "status"=>""
                 // ],[
                 //     "url"=>$router."laporan/lapoBelanjaAllOpd",
                 //     "menu"=>"Rekap Total Belanja ",

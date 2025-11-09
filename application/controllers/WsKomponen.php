@@ -7,6 +7,8 @@ class WsKomponen extends CI_Controller {
         // $this->load->helper('url','html_helper','mbgs_helper');
         $this->load->model('Mkategori');
         $this->load->model('Msop');
+        $this->load->model('Mdinas');
+        
         $this->load->helper("tmdashio_helper");
         $this->mbgs->_setBaseUrl(base_url());
         
@@ -768,6 +770,7 @@ class WsKomponen extends CI_Controller {
 
         return print_r(json_encode($this->_));
     }
+    
     function lapoBelanja($page){
         
         $this->_=array_merge(
@@ -801,31 +804,8 @@ class WsKomponen extends CI_Controller {
         // }elseif($this->kdJabatan==3){
         //     $this->_['dinas']=$this->qexec->_func(_dinas(""));
         // }
-        $this->_['dinas']=$this->qexec->_func(_rekapBelanjaAllOpd($this->tahun," and a.kdDinas='".$this->kdDinas."'"));
-        if($this->kdJabatan==2){
-            $gadmin=$this->qexec->_func(_rekapBelanjaAllOpdAG($this->tahun,$this->kdMember1,""));
-            if(count($gadmin)>0){
-                $this->_['dinas']=$gadmin;
-            }
-        }elseif($this->kdJabatan==3){
-            $this->_['dinas']=$this->qexec->_func(_rekapBelanjaAllOpd($this->tahun,""));
-        }
-
-        $this->_['apbd']=array_merge(
-            array([
-                "value"=>"all",
-                "valueName"=>"Tanpa FIlter"
-            ]),
-            $this->qexec->_func(_cbApbd("2"," where kdApbd1=5 and taApbd2='".$this->tahun."'"))
-        );
-
-
-        $this->_['dinas'][0]['tsub']=$this->qexec->_func(_tsub($this->_['dinas'][0]['kdDinas'],$this->tahun,""))[0]['total'];
-        $this->_['dinas'][0]['tsubProses']=count($this->qexec->_func(_tsubProses($this->_['dinas'][0]['kdDinas'],$this->tahun,"")));
-
-        $this->_['dinas'][0]['tpaguPra']=$this->qexec->_func(_tpagu($this->_['dinas'][0]['kdDinas'],"1",$this->tahun,""))[0]['total'];
-        $this->_['dinas'][0]['tpaguRka']=$this->qexec->_func(_tpagu($this->_['dinas'][0]['kdDinas'],"2",$this->tahun,""))[0]['total'];
-        $this->_['dinas'][0]['tpaguFinal']=$this->qexec->_func(_tpagu($this->_['dinas'][0]['kdDinas'],"3",$this->tahun,""))[0]['total'];
+        
+        $this->_['dinas']=$this->Mdinas->all();
 
         return print_r(json_encode($this->_));
     }

@@ -53,9 +53,10 @@ function _onload(data){
 }
 function __persentaseRealisasi(dt) {
     const fdt =  dt.filter(v => Number(v.totalR) > 1);
-    const totalfdt = fdt.reduce((sum, v) => sum + Number(((v.totalR/v.totalPRARKA)*100).toFixed(2)), 0); 
+    const totalB = fdt.reduce((sum, v) => sum + Number(v.totalR),0);  
+    const totalR = fdt.reduce((sum, v) => sum + Number(v.totalPRARKA),0); 
     
-    return ((totalfdt / (fdt.length * 100)) * 100).toFixed(2);
+    return ((totalB / totalR) * 100).toFixed(2);
 }
 function __valueInformasiBidang(){  
     

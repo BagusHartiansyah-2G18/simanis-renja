@@ -8,6 +8,7 @@ class Proses extends CI_Controller {
         $this->_=array();
         $this->load->model('Mkategori');
         $this->load->model('Msop');
+        $this->load->model('Mdinas');
 
         
         $this->kdMember=$this->sess->kdMember;
@@ -775,6 +776,26 @@ class Proses extends CI_Controller {
             return $this->mbgs->resFalse("Terjadi Kesalahan sistem");
         }
         // }return $this->mbgs->resFalse($portal['msg']);
+    }
+
+    function dinasview() {
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }
+        $baseEND=json_decode((base64_decode($_POST['data'])));
+    
+        $kdDinas  =$baseEND->{'kdDinas'};
+        $pagu    =$baseEND->{'pagu'};
+        $real    =$baseEND->{'real'};
+
+        $resp = $this->Mdinas->upd($kdDinas,[
+            "pagu"=>$pagu,
+            "realisasi"=>$real
+        ]);
+        if($resp){
+            $this->_['dinas']=$resp;
+            return $this->mbgs->resTrue($this->_);
+        }
     }
     function updBPerubahan(){
         if($this->sess->kdMember==null){

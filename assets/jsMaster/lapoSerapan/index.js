@@ -26,15 +26,17 @@ function setData(xdata) {
     _.dinas=[];
     _.dbidang=[];
     _.bidang.forEach(v=>{
-        const bidang = xdata.filter(x=>Number(x.kdBidang) == Number(v.value)).map(x=>({
-            kd:Number(v.value),
-            nm:v.valueName,
-            sub:x.nmSub,
-            total:x.totalPRARKA,
-            realisasi:x.totalR,
-            persen:(x.totalPRARKA==0?0:((x.totalR/x.totalPRARKA)*100).toFixed(2)),
-        }));
-        if(bidang.length>0){
+        const bidang = xdata.filter(x=>Number(x.kdBidang) == Number(v.value)).map(x=>{
+            return ({
+                kd:Number(v.value),
+                nm:v.valueName,
+                sub:x.nmSub,
+                total:x.totalPRARKA,
+                realisasi:x.totalR,
+                persen:(Number(x.totalPRARKA)==0?0:((Number(x.totalR)/Number(x.totalPRARKA))*100).toFixed(2)),
+            })
+        });
+        if(bidang.length>0){ 
             _.dbidang.push({
                 nm:bidang[0].nm,
                 kd:Number(v.value),
@@ -45,14 +47,16 @@ function setData(xdata) {
         _.dinas.push(...bidang);
     });
 
-    const lainnya = xdata.filter(v=>Number(v.kdBidang) == 0).map(v=>({
-        kd:0,
-        nm:"lainnya",
-        sub:v.nmSub,
-        total:v.totalPRARKA,
-        realisasi:v.totalR,
-        persen:(v.totalPRARKA==0?0:((v.totalR/v.totalPRARKA)*100).toFixed(2)),
-    }));
+    const lainnya = xdata.filter(v=>Number(v.kdBidang) == 0).map(v=>{ 
+        return ({
+            kd:0,
+            nm:"lainnya",
+            sub:v.nmSub,
+            total:v.totalPRARKA,
+            realisasi:v.totalR,
+            persen:(Number(v.totalPRARKA)==0?0:((Number(v.totalR)/Number(v.totalPRARKA))*100).toFixed(2)),
+        })
+    });
     if(lainnya.length>0){
         _.dbidang.push({
                 nm:"lainnya",
@@ -75,11 +79,16 @@ function _generateTabel() {
     
 }
 function __persentaseRealisasi(fdt) {
-    const totalfdt = fdt.reduce((sum, v) => sum + Number(v.persen), 0); 
-    const persen= ((totalfdt / (fdt.length * 100)) * 100).toFixed(2);
-
+    
+    const totalfdt = fdt.reduce((sum, v) => sum + Number(v.persen), 0);  
+    
+    
     const pagu = fdt.reduce((sum, v) => sum + Number(v.total), 0); 
     const realisasi = fdt.reduce((sum, v) => sum + Number(v.realisasi), 0); 
+
+    const persen= ((realisasi / pagu) * 100).toFixed(2);
+
+      
     return {persen,pagu,realisasi,sub:fdt.length}
 }
 function _form() {
@@ -111,7 +120,7 @@ function _formData() {
     return `<div class="row m-2 shadow">`
                 +_formIcon({
                     icon:'<i class="mdi mdi-file-check"></i>'
-                    ,text:"<h3>Rekapan Realisasi Anggaran</h3>",
+                    ,text:"<h3>Rekapan BPKAD</h3>",
                     classJudul:' p-2',
                     id:"form1",
                     // btn:_btn({
