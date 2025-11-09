@@ -297,8 +297,8 @@
                 "bg"=>"",
                 "icon"=>'<i class="fa fa-bolt"></i>',
                 "src"=>$fs_css."informasi.png",
-                "textSmall"=>"Nama Sistem",
-                "text"=>"E-Budgeting"
+                "textSmall"=>"Sistem Monitoring Organisasi",
+                "text"=>"SI MANIS"
             ],
             // [
             //     "url"=>"",
