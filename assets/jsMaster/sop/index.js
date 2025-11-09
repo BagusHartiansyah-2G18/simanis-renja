@@ -18,7 +18,7 @@ function _onload(data){
 
         if(!_.isAdm & _.sop.length>0){
             
-            setPDF(_.kategori[0].value,_.kategori[0].valueName);
+            setPDF(_.kategori[0].value.replace(/\s+/g, '').toLowerCase(),_.kategori[0].valueName);
         }
     })
 }    
