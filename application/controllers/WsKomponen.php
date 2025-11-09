@@ -438,7 +438,7 @@ class WsKomponen extends CI_Controller {
 
         
         
-        $this->_['kategori']=$this->Msop->cbKategori();
+        
 
         $this->_['isAdm']  = false;
         $kdBidang =$this->kdBidang;
@@ -451,6 +451,7 @@ class WsKomponen extends CI_Controller {
             $where .= " and kdDBidang='".$kdBidang."'";
         } 
         $this->_['bidang']=$this->qexec->_func(_cbBidangDinas($where));
+        $this->_['kategori']=$this->Msop->cbKategori($kdBidang);
         $this->_['sop']=$this->Msop->all($kdBidang);
         
         // $this->_['dinas'][0]['tpaguPra']=$this->qexec->_func(_tpagu($this->_['dinas'][0]['value'],"1",$this->tahun,""))[0]['total'];

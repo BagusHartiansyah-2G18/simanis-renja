@@ -29,10 +29,13 @@ class Msop extends CI_Model {
         return $this->db->get()->result();
     }
 
-    public function cbKategori() {
+    public function cbKategori($kdBidang = "") {
         $this->db->select('kategori as value, kategori AS valueName');
         $this->db->from('sop');
         $this->db->group_by('kategori');
+        if ($kdBidang != "") {
+            $this->db->where('kdBidang', $kdBidang);
+        }
 
         return $this->db->get()->result();
     }
