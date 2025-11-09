@@ -44,7 +44,7 @@ function tabPanel(){
                             `:''}
                             ${_.kategori.map(v=>`
                                 <li class="${!_.isAdm && 'active'}">
-                                    <a href="#kate${v.value}" data-toggle="tab" onclick="setPDF('${v.value}','${v.valueName}')"><i class="fa fa-inbox"></i> ${v.valueName} </a>
+                                    <a href="#kate${v.value}" data-toggle="tab" onclick="setPDF('${v.value.text.replace(/\s+/g, '')}','${v.valueName}')"><i class="fa fa-inbox"></i> ${v.valueName} </a>
                                 </li>    
                             `).join(" ")}
                         </ul>
@@ -87,7 +87,7 @@ function tabPanel(){
                         </div> 
                     `:''} 
                     ${_.kategori.map((v,i)=>`
-                        <div class="tab-pane ${!_.isAdm && i==0 ? 'active':''}" id="kate${v.value}">
+                        <div class="tab-pane ${!_.isAdm && i==0 ? 'active':''}" id="kate${v.value.replace(/\s+/g, '')}">
                             <div class="form-panel">
                                 ${
                                     _formIcon({
