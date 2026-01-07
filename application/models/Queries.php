@@ -30,42 +30,46 @@
             return true;
         }
         function _multiProc($query){
-            $this->db->trans_start(); # Starting Transaction
-            $this->db->trans_strict(FALSE); # See Note 01. If you wish can remove as well 
-            $data=explode(";",$query);
-            foreach ($data as $key => $v) {
-                if(strlen(trim($v))>1){
-                    $this->db->query($v);
+            $this->db->trans_begin();
+
+            $queries = explode(";", $query);
+
+            foreach ($queries as $q) {
+                $q = trim($q);
+                if ($q == '') continue;
+
+                $this->db->query($q);
+
+                // JIKA QUERY GAGAL
+                if ($this->db->error()['code'] != 0) {
+                    log_message('error', 'Query gagal: '.$q);
+                    log_message('error', 'DB Error: '.json_encode($this->db->error()));
+
+                    $this->db->trans_rollback();
+                    return FALSE;
                 }
             }
-            $this->db->trans_complete(); # Completing transaction
-            if ($this->db->trans_status() === FALSE) {
-                $this->db->trans_rollback();
-                return FALSE;
-            } 
-            else {
-                $this->db->trans_commit();
-                return TRUE;
-            }
-            // $this->db->trans_start();
+
+            $this->db->trans_commit();
+            return TRUE;
+            
+            // $this->db->trans_start(); # Starting Transaction
             // $this->db->trans_strict(FALSE); # See Note 01. If you wish can remove as well 
             // $data=explode(";",$query);
             // foreach ($data as $key => $v) {
-            //     $this->db->query($v);
+            //     if(strlen(trim($v))>1){
+            //         $this->db->query($v);
+            //     }
             // }
-            // $this->db->trans_complete();
+            // $this->db->trans_complete(); # Completing transaction
             // if ($this->db->trans_status() === FALSE) {
-            //     # Something went wrong.
             //     $this->db->trans_rollback();
             //     return FALSE;
             // } 
             // else {
-            //     # Everything is Perfect. 
-            //     # Committing data to the database.
             //     $this->db->trans_commit();
             //     return TRUE;
             // }
-            // return true;
         }
         function _funcProcedure($query){
             $query = $this->db->query($query);

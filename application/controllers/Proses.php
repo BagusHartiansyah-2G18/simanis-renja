@@ -1153,76 +1153,179 @@ class Proses extends CI_Controller {
         
     }
     
-    function saveImportJsonRealisasi(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        } 
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true); 
-        $dt = $data['dt']; 
-        $bulan = $data['bulan'];  
-        $qaddSub = "";
-        if(count($data)>0){
-            $qdel="delete from ubjudul where kdDinas='".$this->kdDinas."' and taJudul='".$this->tahun."' and bulan='".$bulan."'; ";
-            if($bulan=="1"){
-                $qdel.="delete from psub where kdDinas='".$this->kdDinas."' and taSub='".$this->tahun."'";
-                $qaddSub =" insert into psub (kdDinas,kdKeg,kdSub,nmSub,taSub,pagu) values ";
-            }
-            $q=" insert into ubjudul (kdDinas, kdSub, kdApbd6, kdJudul, nama, taJudul,total,tahapan,bulan,pagu) values";
-            foreach ($dt as $key => $v) { 
-                $i = 1;
-                if($bulan=="1"){ 
-                    $qaddSub.=" 
-                    (
-                        '".$this->kdDinas."',
-                        '".substr($v['kd'],0,12)."', 
-                        '".$v['kd']."',
-                        '".$v['nm']."',
-                        '".$this->tahun."',
-                        '".$v['pagu']."'
-                    ),";
-                }
-                foreach ($v['judul'] as $k => $val) {
-                    $code = explode("-",$val['kode_unik']);
-                    $q.=" 
-                    (
-                        '".$code[0]."',
-                        '".$code[3]."', 
-                        '".$code[4]."',
-                        '".$i."',
-                        '".$val['nama_akun']."',
+    // function saveImportJsonRealisasi(){
+    //     if($this->sess->kdMember==null){
+    //         return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+    //     } 
+    //     $json = file_get_contents('php://input');
+    //     $data = json_decode($json, true); 
+    //     $dt = $data['dt']; 
+    //     $bulan = $data['bulan'];  
+    //     $qaddSub = "";
+    //     if(count($data)>0){
+    //         $qdel="delete from ubjudul where kdDinas='".$this->kdDinas."' and taJudul='".$this->tahun."' and bulan='".$bulan."'; ";
+    //         if($bulan=="1"){
+    //             $qdel.="delete from psub where kdDinas='".$this->kdDinas."' and taSub='".$this->tahun."'";
+    //             $qaddSub =" insert into psub (kdDinas,kdKeg,kdSub,nmSub,taSub,pagu) values ";
+    //         }
+    //         $q=" insert into ubjudul (kdDinas, kdSub, kdApbd6, kdJudul, nama, taJudul,total,tahapan,bulan,pagu) values ";
+    //         foreach ($dt as $key => $v) { 
+    //             $i = 1;
+    //             if($bulan=="1"){ 
+    //                 $qaddSub.=" 
+    //                 (
+    //                     '".$this->kdDinas."',
+    //                     '".substr($v['kd'],0,12)."', 
+    //                     '".$v['kd']."',
+    //                     '".$v['nm']."',
+    //                     '".$this->tahun."',
+    //                     '".$v['pagu']."'
+    //                 ),";
+    //             }
+    //             foreach ($v['judul'] as $k => $val) {
+    //                 $code = explode("-",$val['kode_unik']);
+    //                 $q.=" 
+    //                 (
+    //                     '".$code[0]."',
+    //                     '".$code[3]."', 
+    //                     '".$code[4]."',
+    //                     '".$i."',
+    //                     '".$val['nama_akun']."',
                         
-                        '".$this->tahun."',
-                        '".$val['jumlah_sd_saat_ini']."',
-                        '1',
-                        '".$bulan."',
-                        '".$val['alokasi_anggaran']."'
-                    ),";
-                    $i++;
-                }
+    //                     '".$this->tahun."',
+    //                     '".$val['jumlah_sd_saat_ini']."',
+    //                     '1',
+    //                     '".$bulan."',
+    //                     '".$val['alokasi_anggaran']."'
+    //                 ),";
+    //                 $i++;
+    //             }
                 
-            }
-            $q = substr($q,0,strlen($q)-1)."; "; 
-            $check=$this->qexec->_multiProc($qdel);
-            if($check){
-                if($bulan=="1"){ 
-                    $q.=substr($qaddSub,0,strlen($qaddSub)-1).";";
-                } 
-                // return print_r($q);
-                $check=$this->qexec->_multiProc($q);
-                if($check){
-                    return $this->mbgs->resTrue($this->_); 
-                }else{
-                    return $this->mbgs->resFalse("Terjadi Kesalahan sistem");
-                }
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan sistem");
-            }
-        } else{
-          return print_r((base64_decode($_POST['data'])));
-        }
+    //         }
+    //         $q = substr($q,0,strlen($q)-1)."; "; 
+    //         $check=$this->qexec->_multiProc($qdel);
+    //         if($check){
+    //             if($bulan=="1"){ 
+    //                 // $check=$this->qexec->_multiProc(substr($qaddSub,0,strlen($qaddSub)-1).";");
+    //                 $q.=substr($qaddSub,0,strlen($qaddSub)-1).";";
+    //             } 
+    //             return print_r($q);
+    //             $check=$this->qexec->_multiProc($q);
+    //             if($check){
+    //                 return $this->mbgs->resTrue($this->_); 
+    //             }else{
+    //                 return $this->mbgs->resFalse("Terjadi Kesalahan sistem");
+    //             }
+    //         }else{
+    //             return $this->mbgs->resFalse("Terjadi Kesalahan sistem");
+    //         }
+    //     } else{
+    //       return print_r((base64_decode($_POST['data'])));
+    //     }
         
+    // }
+    function saveImportJsonRealisasi(){
+        if ($this->sess->kdMember == null) {
+            return $this->mbgs->resFalse("Maaf, pengguna tidak terdeteksi");
+        }
+
+        $json  = file_get_contents('php://input');
+        $data  = json_decode($json, true);
+
+        if (!isset($data['dt']) || empty($data['dt'])) {
+            return $this->mbgs->resFalse("Data kosong");
+        }
+
+        $dt     = $data['dt'];
+        $bulan  = $data['bulan'];
+
+        $queries = [];
+
+        /* ================= DELETE ================= */
+        $queries[] = "
+            DELETE FROM ubjudul 
+            WHERE kdDinas='{$this->kdDinas}' 
+            AND taJudul='{$this->tahun}' 
+            AND bulan='{$bulan}'
+        ";
+
+        if ($bulan == "1") {
+            $queries[] = "
+                DELETE FROM psub 
+                WHERE kdDinas='{$this->kdDinas}' 
+                AND taSub='{$this->tahun}'
+            ";
+        }
+
+        /* ================= INSERT PSUB ================= */
+        if ($bulan == "1") {
+            $valuesSub = [];
+
+            foreach ($dt as $v) {
+                $valuesSub[] = "(
+                    '{$this->kdDinas}',
+                    '".substr($v['kd'],0,12)."',
+                    '{$v['kd']}',
+                    '{$v['nm']}',
+                    '{$this->tahun}',
+                    '{$v['pagu']}'
+                )";
+            }
+
+            if (!empty($valuesSub)) {
+                $queries[] = "
+                    INSERT INTO psub 
+                    (kdDinas,kdKeg,kdSub,nmSub,taSub,pagu)
+                    VALUES ".implode(',', $valuesSub);
+            }
+        }
+
+        /* ================= INSERT UBJUDUL ================= */
+        $valuesJudul = [];
+         
+        foreach ($dt as $v) {
+            $i = 1;
+            foreach ($v['judul'] as $val) {
+                $code = explode("-", $val['kode_unik']);
+            
+                $valuesJudul[] = "(
+                    '{$code[0]}',
+                    '{$code[3]}',
+                    '{$code[4]}',
+                    '{$i}',
+                    '{$val['nama_akun']}',
+                    '{$this->tahun}',
+                    '{$val['jumlah_sd_saat_ini']}',
+                    '1',
+                    '{$bulan}',
+                    '{$val['alokasi_anggaran']}'
+                )";
+                $i++;
+            }
+        }
+
+        // return print_r($valuesJudul);
+
+        if (!empty($valuesJudul)) {
+            $queries[] = "
+                INSERT INTO ubjudul
+                (kdDinas, kdSub, kdApbd6, kdJudul, nama, taJudul, total, tahapan, bulan, pagu)
+                VALUES ".implode(',', $valuesJudul);
+        }
+
+        /* ================= EKSEKUSI ================= */
+        
+        $finalQuery = implode(";", $queries).";";
+        
+        $check = $this->qexec->_multiProc($finalQuery);
+
+        if ($check) {
+            return $this->mbgs->resTrue("Import berhasil");
+        }
+
+        return $this->mbgs->resFalse("Terjadi kesalahan sistem");
     }
+
     
     function inpSlider(){
         $portal=$this->_keamanan($_POST['code'],_getNKA("c-sett",false));

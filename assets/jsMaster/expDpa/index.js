@@ -715,26 +715,43 @@ function rangkumData() {
             try {
                 _.files[x].forEach(v => {
                     if(v.kode_akun!=undefined){
-                        switch (v.kode_akun.length) {
+                        // switch (v.kode_akun.length) { //ini 2025
+                        //     case 1: resp.rek.l1.push({kd:v.kode_akun, nm:v.nama_akun}); break;
+                        //     case 3: resp.rek.l2.push({kd:v.kode_akun, nm:v.nama_akun}); break;
+                        //     case 6: resp.rek.l3.push({kd:v.kode_akun, nm:v.nama_akun}); break;
+                        //     case 7:  resp.urus.u3.push({kd:v.kode_akun, nm:v.nama_akun}); break;
+                        //     case 9:  resp.rek.l4.push({kd:v.kode_akun, nm:v.nama_akun}); break;
+                        //     case 12: 
+                        //         if(_.kdDinas.substring(0,3)==v.kode_akun.substring(0,3)){
+                        //             resp.urus.u4.push({kd:v.kode_akun, nm:v.nama_akun});
+                        //         }else{
+                        //             resp.rek.l5.push({kd:v.kode_akun, nm:v.nama_akun});
+                        //         }
+                        //     break;
+                        //     case 17: 
+                        //         if(_.kdDinas.substring(0,3)==v.kode_akun.substring(0,3)){
+                        //             resp.urus.u5.push({kd:v.kode_akun, nm:v.nama_akun,pagu:v.alokasi_anggaran});
+                        //         }else{
+                        //             resp.judul.push(v);
+                        //             resp.rek.l6.push({kd:v.kode_akun, nm:v.nama_akun});
+                        //         }
+                        //     break;
+                        //     default:
+                        //         break;
+                        // }
+
+                        switch (v.kode_akun.length) { //ini 2026
                             case 1: resp.rek.l1.push({kd:v.kode_akun, nm:v.nama_akun}); break;
                             case 3: resp.rek.l2.push({kd:v.kode_akun, nm:v.nama_akun}); break;
                             case 6: resp.rek.l3.push({kd:v.kode_akun, nm:v.nama_akun}); break;
                             case 7:  resp.urus.u3.push({kd:v.kode_akun, nm:v.nama_akun}); break;
                             case 9:  resp.rek.l4.push({kd:v.kode_akun, nm:v.nama_akun}); break;
-                            case 12: 
-                                if(_.kdDinas.substring(0,3)==v.kode_akun.substring(0,3)){
-                                    resp.urus.u4.push({kd:v.kode_akun, nm:v.nama_akun});
-                                }else{
-                                    resp.rek.l5.push({kd:v.kode_akun, nm:v.nama_akun});
-                                }
-                            break;
-                            case 17: 
-                                if(_.kdDinas.substring(0,3)==v.kode_akun.substring(0,3)){
-                                    resp.urus.u5.push({kd:v.kode_akun, nm:v.nama_akun,pagu:v.alokasi_anggaran});
-                                }else{
-                                    resp.judul.push(v);
-                                    resp.rek.l6.push({kd:v.kode_akun, nm:v.nama_akun});
-                                }
+                            case 12: resp.urus.u4.push({kd:v.kode_akun, nm:v.nama_akun}); break;
+                            case 13: resp.rek.l5.push({kd:v.kode_akun, nm:v.nama_akun}); break;
+                            case 17:  resp.urus.u5.push({kd:v.kode_akun, nm:v.nama_akun,pagu:v.alokasi_anggaran}); break;
+                            case 19: 
+                                resp.judul.push(v);
+                                resp.rek.l6.push({kd:v.kode_akun, nm:v.nama_akun});
                             break;
                             default:
                                 break;
@@ -761,6 +778,8 @@ function rangkumData() {
 }
 function rangkumDataClean() {
     const xdt = rangkumData();
+    // console.log(xdt);
+    
     const resp =bersihkanDuplikat(xdt.urus.u5).map(v=>({...v, 
         judul:xdt.judul.filter(fv=>fv.kode_unik.split(v.kd).length>1)
     })); 
