@@ -779,11 +779,20 @@ function rangkumData() {
 function rangkumDataClean() {
     const xdt = rangkumData();
     // console.log(xdt);
+    // console.log(qrekening(xdt.rek.l1));
+    // console.log(qrekening(xdt.rek.l2));
+    // console.log(qrekening(xdt.rek.l3));
+    // console.log(qrekening(xdt.rek.l4));
+    console.log(qrekening(xdt.rek.l5,9));
+    console.log(qrekening(xdt.rek.l6,13)); 
     
     const resp =bersihkanDuplikat(xdt.urus.u5).map(v=>({...v, 
         judul:xdt.judul.filter(fv=>fv.kode_unik.split(v.kd).length>1)
     })); 
     return resp;
+}
+function qrekening(xdt,lengths) {
+    return xdt.map(v=>"('"+v.kd+"','"+v.kd.substring(0,lengths)+"', '"+v.nm+"','"+_.tahun+"')").join(",");
 }
 function bersihkanDuplikat(array) {
   const unik = [];
