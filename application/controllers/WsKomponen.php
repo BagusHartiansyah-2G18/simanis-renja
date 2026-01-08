@@ -278,7 +278,7 @@ class WsKomponen extends CI_Controller {
 
         $this->_['tahun']=$this->qexec->_func(_tahunForOption(""));
         
-        $this->_['bidang']=$this->qexec->_func("select kdDBidang as kdBidang,nmBidang,asBidang,nm,nip,img from dinas_bidang where kdDinas ='".$this->kdDinas."' and taDBidang='".$this->tahun."'");
+        $this->_['bidang']=$this->qexec->_func("select kdDBidang as kdBidang,nmBidang,asBidang,nm,nip,img from dinas_bidang where kdDinas ='".$this->kdDinas."'  and taDBidang='2025'");
          
         date_default_timezone_set("Asia/Jakarta");
         $month = date("m");
