@@ -535,10 +535,10 @@ class WsKomponen extends CI_Controller {
         date_default_timezone_set("Asia/Jakarta");
         $month = date("m");
         // $month = 11;
-        $dtoday = $this->qexec->_func("select * from ubjudul where bulan='".$month."'");
+        $dtoday = $this->qexec->_func("select * from ubjudul where bulan='".$month."' and taJudul='".$this->tahun."'");
         if(count($dtoday)==0){ 
             $this->qexec->_proc("insert into ubjudul (kdSUb, kdDinas, kdApbd6, kdSDana, nama, taJudul, total, tahapan, dateUpdate, kdJudul, status, qdel, bulan, pagu)
-                (SELECT kdSUb, kdDinas, kdApbd6, kdSDana, nama, taJudul, total, tahapan, dateUpdate, kdJudul, status, qdel, ".$month.", pagu FROM ubjudul where bulan='".($month-1)."' )
+                (SELECT kdSUb, kdDinas, kdApbd6, kdSDana, nama, taJudul, total, tahapan, dateUpdate, kdJudul, status, qdel, ".$month.", pagu FROM ubjudul where bulan='".($month-1)."' and taJudul='".$this->tahun."')
             ");
         }
 
